@@ -22,8 +22,8 @@ author: Vladimir Kiselev & the Hemberg lab; adapted by Sidney Bell
 description: >- # this means to ignore newlines until "baseurl:"
   Python-based adaptation of the single-cell course developed by the Hemberg lab.
 
-baseurl: "" # the subpath of your site, e.g. /blog. If there is no subpath for your site, use an empty string ""
-url: "https://jupyter.org" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/scRNA-python-workshop" # the subpath of your site, e.g. /blog. If there is no subpath for your site, use an empty string ""
+url: "https://www.https://chanzuckerberg.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 #######################################################################################
 # Jupyter Book settings
