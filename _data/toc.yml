@@ -23,11 +23,14 @@
   url: analysis/04-clustering
 - title: Differential expression
   url: analysis/05-diffexp
+- header: Trajectory inference
 # - title: Trajectory inference
 #   url: analysis/trajectory
 
 - divider: true
 - header: Exploratory analysis & advanced exercises
+- header: Advanced exercises
+- header: Exploration with cellxgene
 # - title: Advanced exercises
 #   url: /exploration/advanced
 # - title: Exploration with cellxgene
