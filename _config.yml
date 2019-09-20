@@ -23,7 +23,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Python-based adaptation of the single-cell course developed by the Hemberg lab.
 
 baseurl: "/scRNA-python-workshop" # the subpath of your site, e.g. /blog. If there is no subpath for your site, use an empty string ""
-url: "https://www.https://chanzuckerberg.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://www.chanzuckerberg.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 #######################################################################################
 # Jupyter Book settings
@@ -31,8 +31,8 @@ url: "https://www.https://chanzuckerberg.github.io" # the base hostname & protoc
 # Sidebar settings
 show_sidebar: true # Show the sidebar. Only set to false if your only wish to host a single page.
 collapse_inactive_chapters: true # Whether to collapse the inactive chapters in the sidebar
-textbook_logo: images/czi-logo.png # A logo to be displayed at the top of your textbook sidebar
-textbook_logo_link: https://github.com/sidneymbell/scRNA.seq.course # A link for the logo.
+# textbook_logo: images/czi-logo.png # A logo to be displayed at the top of your textbook sidebar
+# textbook_logo_link: https://github.com/sidneymbell/scRNA.seq.course # A link for the logo.
 sidebar_footer_text: 'Powered by <a href="https://github.com/jupyter/jupyter-book">Jupyter Book</a>'
 number_toc_chapters: true # Whether to add numbers to chapterse in your Table of Contents. If true, you can control this at the Chapter level in _data/toc.yml
 
