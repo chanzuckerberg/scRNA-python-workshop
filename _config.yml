@@ -75,8 +75,8 @@ download_button_text: "Download" # The text that download buttons will contain
 # Jupyter book extensions and additional features
 
 # Bibliography and citation settings. See https://github.com/inukshuk/jekyll-scholar#configuration for options
-scholar:
-  style: apa
+# scholar:
+#   style: apa
 
 #######################################################################################
 # Option to add a Goggle analytics tracking code
@@ -138,7 +138,7 @@ exclude:
 
 plugins:
   - jekyll-redirect-from
-  - jekyll-scholar
+  # - jekyll-scholar
 
 # Jupyter Book version - DO NOT CHANGE THIS. It is generated when a new book is created
 jupyter_book_version: INSERT
