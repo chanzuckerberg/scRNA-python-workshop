@@ -252,7 +252,7 @@ plt.axvline(1000, color='red')
 
 {:.output_data_text}
 ```
-<matplotlib.lines.Line2D at 0x1086951d0>
+<matplotlib.lines.Line2D at 0x104b67450>
 ```
 
 
@@ -310,22 +310,6 @@ Now we can define a cell filter based on our findings:
 
 
 
-### Exercise
-
-Use the SCANPY function `sc.pp.filter_cells()` to filter cells with fewer than 50,000 reads. Repeat to remove those with fewer than 750 genes detected. How many cells does this remove?  
-_Hint: start with the Parameters list in `help(sc.pp.filter_cells)`
-
-<p>
-<details>
-<summary><h3>Solution</h3></summary>
-<code>print('Started with: \n', adata)
-sc.pp.filter_cells(adata, min_genes = 750)
-sc.pp.filter_cells(adata, min_counts = 50000)
-print('Finished with: \n', adata)</code>
-</details>
-
-
-
 There isn't an automatic function for removing cells with a high percentage of ERCC reads, but we can use a _mask_ to remove them like so:
 
 
@@ -340,6 +324,22 @@ adata = adata[low_ERCC_mask]
 </div>
 
 </div>
+
+
+
+### Exercise
+
+Use the SCANPY function `sc.pp.filter_cells()` to filter cells with fewer than 50,000 reads. Repeat to remove those with fewer than 750 genes detected. How many cells does this remove?  
+_Hint: start with the Parameters list in `help(sc.pp.filter_cells)`
+
+<p>
+<details>
+<summary><h3>Solution</h3></summary>
+<code>print('Started with: \n', adata)
+sc.pp.filter_cells(adata, min_genes = 750)
+sc.pp.filter_cells(adata, min_counts = 50000)
+print('Finished with: \n', adata)</code>
+</details>
 
 
 

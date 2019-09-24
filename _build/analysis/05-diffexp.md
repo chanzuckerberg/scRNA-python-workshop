@@ -44,9 +44,43 @@ Here, we'll demonstrate N approaches to parametric comparisons between groups.
 
 
 
+### Exercise: building intuition about distributions
+
+Let's revisit some foundational statistics to tap into some intuition you use all the time. 
+
+Say you're looking for a restaurant for dinner, and you are comparing two different restaurant options. If you see reviews that look like this, would you think one is better than the other? How sure are you? 
+
+<img src="../figures/distrib-small-n.png">
+
+Now, what if you saw these sets of reviews? Do you think one is better? 
+
+<img src="../figures/distrib-large-n.png">
+
+Finally, what about this set of reviews?
+
+<img src="../figures/distrib-giant-n.png">
+
+
+Chat with your neighbor: what factors about the reviews influence your assessment of which restaurant is better? How could this apply to your scRNAseq data?
+
+<p>
+
+<details>
+    <summary><h3>Discussion</h3></summary>
+    Looking at the first set of reviews, my conclusion would be "Maybe the right one is better? But there aren't many reviews yet, so I'm not sure." 
+    <p>
+    Once we look at the second set of reviews, I would have more confidence that the restaurant on the right is superior, because there are more reviews. 
+    <p>
+    Looking at the final set of reviews, we can be quite confident that there is a "real" difference in the mean review score, but the magnitude of this difference is small. 
+    <p>
+    This is a very important distinction: a t-test compares our data to the null hypothesis that the means of two distributions are **equal**. This accounts for the mean, standard deviation, and sample size of the two distributions. However, a p-value alone does not tell us anything about the *magnitude* of that difference: with large N, even very small (and biologically meaningless) differences in expression values can still return very "statistically significant" p-values. 
+
+
+
+
 ## Load data
 
-We'll continue working with the mouse brain data with assigned clusters. 
+Let's apply this intuition to our data. We'll continue working with the mouse brain data with assigned clusters. 
 
 
 
@@ -58,7 +92,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 %matplotlib inline
 
-adata = sc.read('../data/brain_')
+adata = sc.read('../data/brain_clusters.h5ad')
 
 ```
 </div>
@@ -69,7 +103,7 @@ adata = sc.read('../data/brain_')
 
 ### Important note! For differential expression, we need to use the _raw_ values stored in `adata.raw`.
 
-With differential expression, we want to account for both the center and spread of the expression in each group. Recall that when we normalized our values, we standardized the distribution of each gene across cells to be centered at 0 and scaled with variance 1. 
+With differential expression, we want to account for both the center and spread of the expression in each group. Recall that when we normalized our values, we standardized the distribution of each gene across cells to be centered at 0 and scaled with variance 1. So, when calculating differential expression, we should use the raw values (post-QC, pre-normalization). We saved these in `adata.raw` earlier on. 
 
 
 
