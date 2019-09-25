@@ -1,0 +1,90 @@
+---
+interact_link: content/intro/setup.md
+kernel_name: 
+has_widgets: false
+title: |-
+  Setup and installation
+prev_page:
+  url: /intro/about.html
+  title: |-
+    About the course
+next_page:
+  url: /intro/overview.html
+  title: |-
+    Workflow overview
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Setup">Setup<a class="anchor-link" href="#Setup"> </a></h1><h2 id="Format">Format<a class="anchor-link" href="#Format"> </a></h2><p>The workshop consists of explanatory discussions interspersed with hands-on exercises. We strongly encourage you to bring a laptop with all required packages installed in order to fully participate. We will also have office hours with CZI computational biology staff available in the morning to help troubleshoot any installation issues before class begins.</p>
+<h2 id="Installation-guide-(before-class)">Installation guide (before class)<a class="anchor-link" href="#Installation-guide-(before-class)"> </a></h2><h3 id="1.-Install-Python-via-Anaconda">1. Install Python via Anaconda<a class="anchor-link" href="#1.-Install-Python-via-Anaconda"> </a></h3><p>Even if you have previously installed Python, please install <a href="https://docs.anaconda.com/anaconda/install/">Anaconda</a> for <strong>Python version 3</strong> (available on OSX, Linux, and Windows).</p>
+<p>Anaconda is <em>package manager</em>, which means that it helps coordinate your Python installation and related <em>packages</em> (useful code written by other people for performing specific tasks) for you so that you have a consistent <em>environment</em> (the version of Python and the version of the code in each package that your computer looks at when doing your analysis).</p>
+<p>You should now see an icon for "Anaconda Navigator" in your Applications folder (mac) or the Start menu (Windows). Please contact the instructors if you do not see this icon!</p>
+<h3 id="2.-Install-Bioconda">2. Install Bioconda<a class="anchor-link" href="#2.-Install-Bioconda"> </a></h3><p>Not everyone who uses Anaconda is a biologist. As a result, some biology-specific packages are only available in the Bioconda <em>channel</em> (collection of packages).</p>
+<ol>
+<li>Open Anaconda Navigator.</li>
+<li>Click on <code>Environments</code> in the left sidebar</li>
+<li>Click on <code>Channels</code> in the top middle of the screen</li>
+<li>Click on <code>Add...</code></li>
+<li>In the bottom text box, type <code>bioconda</code> and press <code>Enter</code></li>
+<li>Press <code>Update channels</code></li>
+</ol>
+<p><img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-channel.png" width=700></p>
+<h3 id="3.-Download-the-course-config-file">3. Download the course config file<a class="anchor-link" href="#3.-Download-the-course-config-file"> </a></h3><p>To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.</p>
+<ol>
+<li>Download the configuration file called <a href="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/sfn-workshop.yaml"><code>sfn-workshop.yaml</code> here</a>. Save it an a spot you'll remember.</li>
+<li>Open Anaconda Navigator</li>
+<li>Click on <code>Environments</code> in the left sidebar</li>
+<li>Click on <code>Import</code> in the bottom left</li>
+<li>Enter <code>sfn-workshop</code> as the Name, and browse for the <code>sfn-workshop.yaml</code> file you just downloaded</li>
+<li>Press <code>Import</code></li>
+</ol>
+<p><img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-env.png" width=700></p>
+<h3 id="4.-Check-your-installation">4. Check your installation<a class="anchor-link" href="#4.-Check-your-installation"> </a></h3><ol>
+<li>Open Anaconda Navigator</li>
+<li>Click on <code>Environments</code> in the left sidebar</li>
+<li>Select the <code>sfn-workshop</code> environment from the list. This may take several minutes.</li>
+<li>Click on the green <code>play</code> button that appears</li>
+<li>Select <code>Open with Jupyter Notebook</code> from the list</li>
+</ol>
+<p><img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-jupyter.png" width=700></p>
+<p>You should get a browser tab that says "Jupyter" at the top and lists all the files on your computer. This might not seem like much, but is all you need to get started! :)</p>
+<h2 id="If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"><strong>If this does not work, please come to office hours before class so the CZI computational biology team can help you</strong><a class="anchor-link" href="#If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"> </a></h2><h3 id="5.-Download-course-files">5. Download course files<a class="anchor-link" href="#5.-Download-course-files"> </a></h3><p>We'll update this once the curriculum has been finalized; please check back soon.</p>
+<h3 id="Bonus:-install-fun-visualization-tools-(optional)">Bonus: install fun visualization tools (optional)<a class="anchor-link" href="#Bonus:-install-fun-visualization-tools-(optional)"> </a></h3><ol>
+<li>Open Anaconda Navigator</li>
+<li>Click on <code>Environments</code> in the left sidebar</li>
+<li>Select the <code>sfn-workshop</code> environment from the list</li>
+<li>Click on the green <code>play</code> button that appears</li>
+<li>Select <code>Open Terminal</code> <em>(it's not scary, we promise! :)</em></li>
+</ol>
+<h4 id="For-the-imaging-track:">For the imaging track:<a class="anchor-link" href="#For-the-imaging-track:"> </a></h4><ol>
+<li>In the terminal window that opens, copy and paste the following and press <code>Enter</code>:<br>
+<code>python3 -m pip install napari</code></li>
+</ol>
+<p>To test your installation of napari, type <code>napari</code> in the next terminal line and press <code>Enter</code>. You should see an application window open up.</p>
+<h4 id="For-the-single-cell-analysis-track:">For the single-cell analysis track:<a class="anchor-link" href="#For-the-single-cell-analysis-track:"> </a></h4><ol>
+<li>In the terminal window that opens, copy and paste the following and press <code>Enter</code>:<br>
+<code>python3 -m pip install cellxgene</code></li>
+</ol>
+<p>To test your installation of cellxgene, type <code>cellxgene</code> in the next terminal line and press <code>Enter</code>. You should see something like this:<br>
+<code>Usage: cellxgene [OPTIONS] COMMAND [ARGS]...
+Options:
+--version Show the version and exit.
+--help Show this message and exit.
+Commands:
+launch Launch the cellxgene data viewer.
+prepare Preprocesses data for use with cellxgene.</code></p>
+<h4 id="If-this-does-not-work,-and-you-would-like-to-try-out-the-visualization-tools-in-class,-please-come-to-office-hours-before-class-so-we-can-help-you.">If this does not work, and you would like to try out the visualization tools in class, please come to office hours before class so we can help you.<a class="anchor-link" href="#If-this-does-not-work,-and-you-would-like-to-try-out-the-visualization-tools-in-class,-please-come-to-office-hours-before-class-so-we-can-help-you."> </a></h4>
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+</main>

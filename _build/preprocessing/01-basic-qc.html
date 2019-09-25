@@ -1,0 +1,654 @@
+---
+interact_link: content/preprocessing/01-basic-qc.ipynb
+kernel_name: python3
+has_widgets: false
+title: |-
+  Quality control
+prev_page:
+  url: /preprocessing/00-tabula-muris.html
+  title: |-
+    Tabula muris
+next_page:
+  url: /preprocessing/02-normalization.html
+  title: |-
+    Normalization and PCA
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h1><p>Once we have our expression matrix, it should be examined to remove poor quality cells which were not detected in the initial processing of the raw reads. Failure to remove low quality cells at this
+stage may add technical noise which has the potential to obscure
+the biological signals of interest in the downstream analysis.</p>
+<p>Since there is currently no standard method for performing scRNAseq, the expected values for the various QC measures that will be presented here can vary substantially from experiment to experiment. Thus, to perform QC we will be looking for cells which are outliers with respect to the rest of the dataset rather than comparing to independent quality standards. Consequently, care should be taken when comparing quality metrics across datasets collected using different protocols.</p>
+<h1 id="Dataset">Dataset<a class="anchor-link" href="#Dataset"> </a></h1><p>We'll continue working with the Tabula Muris brain data that we prepared earlier:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span> <span class="c1"># import scanpy to handle our AnnData </span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># import pandas to handle dataframes</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> <span class="c1"># import matplotlib to visualize our qc metrics</span>
+
+<span class="c1"># magic incantation to help matplotlib work with our jupyter notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/brain_raw.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Computing-quality-control-metrics">Computing quality control metrics<a class="anchor-link" href="#Computing-quality-control-metrics"> </a></h2><p>We'll compute quality metrics and then filter cells and genes accordingly.</p>
+<p>The <code>calculate_qc_metrics</code> function returns two dataframes: one containing quality control metrics about cells, and one containing metrics about genes. This function is housed in the 'preprocessing' portion of the SCANPY library, which you can read more about <a href="https://icb-scanpy.readthedocs-hosted.com/en/stable/api/index.html#module-scanpy.pp">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">qc</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">calculate_qc_metrics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">qc_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ERCC&#39;</span><span class="p">])</span><span class="c1"># this returns a tuple of (cell_qc_dataframe, gene_qc_dataframe)</span>
+                                 <span class="c1"># ask for the percentage of reads from spike ins</span>
+                                
+<span class="n">cell_qc_dataframe</span> <span class="o">=</span> <span class="n">qc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">gene_qc_dataframe</span> <span class="o">=</span> <span class="n">qc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This is the cell quality control dataframe:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">This is the gene quality control dataframe&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>This is the cell quality control dataframe:
+                         n_genes_by_counts  log1p_n_genes_by_counts  \
+index                                                                 
+A1.B003290.3_38_F.1.1                 3359                 8.119696   
+A1.B003728.3_56_F.1.1                 1718                 7.449498   
+A1.MAA000560.3_10_M.1.1               3910                 8.271548   
+A1.MAA000564.3_10_M.1.1               4352                 8.378621   
+A1.MAA000923.3_9_M.1.1                2248                 7.718241   
+
+                         total_counts  log1p_total_counts  \
+index                                                       
+A1.B003290.3_38_F.1.1        390075.0           12.874097   
+A1.B003728.3_56_F.1.1        776439.0           13.562474   
+A1.MAA000560.3_10_M.1.1     1616087.0           14.295519   
+A1.MAA000564.3_10_M.1.1      360004.0           12.793873   
+A1.MAA000923.3_9_M.1.1       290282.0           12.578611   
+
+                         pct_counts_in_top_50_genes  \
+index                                                 
+A1.B003290.3_38_F.1.1                     25.884766   
+A1.B003728.3_56_F.1.1                     43.051933   
+A1.MAA000560.3_10_M.1.1                   44.066006   
+A1.MAA000564.3_10_M.1.1                   41.650926   
+A1.MAA000923.3_9_M.1.1                    63.392494   
+
+                         pct_counts_in_top_100_genes  \
+index                                                  
+A1.B003290.3_38_F.1.1                      32.847017   
+A1.B003728.3_56_F.1.1                      52.912721   
+A1.MAA000560.3_10_M.1.1                    51.514553   
+A1.MAA000564.3_10_M.1.1                    48.958623   
+A1.MAA000923.3_9_M.1.1                     69.136908   
+
+                         pct_counts_in_top_200_genes  \
+index                                                  
+A1.B003290.3_38_F.1.1                      42.219573   
+A1.B003728.3_56_F.1.1                      65.313309   
+A1.MAA000560.3_10_M.1.1                    60.164211   
+A1.MAA000564.3_10_M.1.1                    56.997422   
+A1.MAA000923.3_9_M.1.1                     77.168753   
+
+                         pct_counts_in_top_500_genes  total_counts_ERCC  \
+index                                                                     
+A1.B003290.3_38_F.1.1                      59.472666            10201.0   
+A1.B003728.3_56_F.1.1                      87.315423            67351.0   
+A1.MAA000560.3_10_M.1.1                    74.451190            29870.0   
+A1.MAA000564.3_10_M.1.1                    69.736170             2592.0   
+A1.MAA000923.3_9_M.1.1                     90.522320            11002.0   
+
+                         log1p_total_counts_ERCC  pct_counts_ERCC  
+index                                                              
+A1.B003290.3_38_F.1.1                   9.230339         2.615138  
+A1.B003728.3_56_F.1.1                  11.117688         8.674345  
+A1.MAA000560.3_10_M.1.1                10.304644         1.848292  
+A1.MAA000564.3_10_M.1.1                 7.860571         0.719992  
+A1.MAA000923.3_9_M.1.1                  9.305923         3.790107  
+
+
+This is the gene quality control dataframe
+                   n_cells_by_counts  mean_counts  log1p_mean_counts  \
+index                                                                  
+0610005C13Rik                     28     0.118201           0.111721   
+0610007C21Rik                   2399   206.211990           5.333742   
+0610007L01Rik                    961    35.938549           3.609256   
+0610007N19Rik                    272     6.498383           2.014687   
+0610007P08Rik                    582    16.328728           2.852366   
+...                              ...          ...                ...   
+Zzef1                            937    29.685974           3.423806   
+Zzz3                             992    27.208467           3.339622   
+a                                 10     0.022052           0.021813   
+l7Rn6                           1145    48.354897           3.899037   
+zsGreen_transgene                  0     0.000000           0.000000   
+
+                   pct_dropout_by_counts  total_counts  log1p_total_counts  
+index                                                                       
+0610005C13Rik                  99.176713         402.0            5.998937  
+0610007C21Rik                  29.461923      701327.0           13.460731  
+0610007L01Rik                  71.743605      122227.0           11.713643  
+0610007N19Rik                  92.002352       22101.0           10.003424  
+0610007P08Rik                  82.887386       55534.0           10.924768  
+...                                  ...           ...                 ...  
+Zzef1                          72.449280      100962.0           11.522510  
+Zzz3                           70.832108       92536.0           11.435364  
+a                              99.705969          75.0            4.330733  
+l7Rn6                          66.333431      164455.0           12.010398  
+zsGreen_transgene             100.000000           0.0            0.000000  
+
+[23433 rows x 6 columns]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Quality-control-for-cells">Quality control for cells<a class="anchor-link" href="#Quality-control-for-cells"> </a></h1><h2 id="Library-size">Library size<a class="anchor-link" href="#Library-size"> </a></h2><p>First, we consider the total number of reads detected per cell.
+Cells with few reads are likely to have been broken or failed to capture a cell, and should thus be removed.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s1">&#39;total_counts&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Total counts&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;N cells&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">50000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">)</span> <span class="c1"># Try plotting with and without scaling the x-axis. When is this helpful?</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0, 1000000.0)</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/01-basic-qc_6_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We have a few cells with fewer than 50,000 reads; we'll remove these downstream.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Detected-genes">Detected genes<a class="anchor-link" href="#Detected-genes"> </a></h2><p>In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s1">&#39;n_genes_by_counts&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;N genes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;N cells&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.lines.Line2D at 0x104b67450&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/01-basic-qc_9_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From the plot we conclude that most cells have between ~1,000-5,000 detected genes,
+which is typical for smartseq2 data. However, this varies by
+experimental protocol and sequencing depth.</p>
+<p>The most notable feature in the above plot is the little peak on the left hand side of the
+distribution. If detection rates were equal across the cells then the
+distribution should be approximately normal. Thus, we will remove those
+cells in the tail of the distribution (fewer than ~1000 detected genes).</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Spike-ins">Spike-ins<a class="anchor-link" href="#Spike-ins"> </a></h2><p>Another measure of cell quality is the ratio between ERCC spike-in RNAs and endogenous RNAs. This ratio can be used to estimate the total amount of RNA in the captured cells. Cells with a high level of spike-in RNAs had low starting amounts of RNA, likely due to the cell being dead or stressed which may result in the RNA being degraded.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Plot the distribution of <code>pct_counts_ERCC</code> in this dataset. What do you think is a reasonable threshold?</p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+<code>plt.hist(cell_qc_dataframe['pct_counts_ERCC'], bins=1000)
+plt.xlabel('Percent counts ERCC')
+plt.ylabel('N cells')
+plt.axvline(10, color='red')</code>
+<p>    
+Placing a threshold is always a judgement call. Here, the majority of cells have less than 10% ERCC counts, but there's a long tail of cells that have very high spike-in counts; these are likely dead cells and should be removed. 
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cell-filtering">Cell filtering<a class="anchor-link" href="#Cell-filtering"> </a></h2><p>Now we can define a cell filter based on our findings:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There isn't an automatic function for removing cells with a high percentage of ERCC reads, but we can use a <em>mask</em> to remove them like so:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">low_ERCC_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s1">&#39;pct_counts_ERCC&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">low_ERCC_mask</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.filter_cells()</code> to filter cells with fewer than 50,000 reads. Repeat to remove those with fewer than 750 genes detected. How many cells does this remove?<br>
+_Hint: start with the Parameters list in <code>help(sc.pp.filter_cells)</code></p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+<code>print('Started with: \n', adata)
+sc.pp.filter_cells(adata, min_genes = 750)
+sc.pp.filter_cells(adata, min_counts = 50000)
+print('Finished with: \n', adata)</code>
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Quality-control-for-genes">Quality control for genes<a class="anchor-link" href="#Quality-control-for-genes"> </a></h2><p>It is typically a good idea to remove genes whose expression level is considered <strong>"undetectable"</strong>. We define a gene as  detectable if at least two cells contain more than 5 reads from the gene. However, the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="p">[</span><span class="s1">&#39;n_cells_by_counts&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;N cells expressing &gt; 0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;N genes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.lines.Line2D at 0x1a29ceccd0&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/01-basic-qc_18_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="p">[</span><span class="s1">&#39;total_counts&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Total counts&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;N genes&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="c1"># plt.ylim(0,1000) # try plotting with and without restricting the axis scales. Why is this sometimes helpful?</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.lines.Line2D at 0x1a320a00d0&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/01-basic-qc_19_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.filter_genes()</code> to filter genes according to the criteria above. How many genes does this remove?<br>
+_Hint: start with the Parameters list in <code>help(sc.pp.filter_genes)</code></p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+<code>print('Started with: \n', adata)
+sc.pp.filter_genes(adata, min_cells = 2)
+sc.pp.filter_genes(adata, min_counts = 10)
+print('Finished with: \n', adata)</code>
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Save-the-data">Save the data<a class="anchor-link" href="#Save-the-data"> </a></h3>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># print(adata) ## Final dimensions of the QC&#39;d dataset</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;../data/brain_qc.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Big-Exercise">Big Exercise<a class="anchor-link" href="#Big-Exercise"> </a></h2><p>Load a demo dataset with <code>pbmc = sc.read('../data/pbmc3k.h5ad')</code>, which profiles 3,000 peripheral blood mononuclear cells.
+Perform exactly the same QC analysis with this dataset. Compare your results to ours (below).</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pbmc</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/pbmc3k.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Fill-me-in">Fill me in<a class="anchor-link" href="#Fill-me-in"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+</main>
