@@ -28,6 +28,9 @@ url: "https://www.chanzuckerberg.github.io" # the base hostname & protocol for y
 #######################################################################################
 # Jupyter Book settings
 
+# Main page settings
+footer_text               : This page was created by <a href="https://github.com/jupyter/jupyter-book/graphs/contributors">The Jupyter Book Community</a>
+
 # Sidebar settings
 show_sidebar: true # Show the sidebar. Only set to false if your only wish to host a single page.
 collapse_inactive_chapters: true # Whether to collapse the inactive chapters in the sidebar
@@ -83,7 +86,7 @@ download_button_text: "Download" # The text that download buttons will contain
 
 # Navigate to https://analytics.google.com, add a new property for your jupyter book and copy the tracking id here.
 google_analytics:
-  mytrackingcode:
+  mytrackingcode: UA-52617120-7
 
 #######################################################################################
 # Jupyter book settings you probably don't need to change
@@ -106,6 +109,7 @@ defaults:
       toc: true
       toc_label: "  On this page"
       toc_icon: "list-ul"
+      excerpt: ''
 
 favicon_path: "images/logo/favicon.ico"
 
@@ -141,6 +145,6 @@ plugins:
   # - jekyll-scholar
 
 # Jupyter Book version - DO NOT CHANGE THIS. It is generated when a new book is created
-jupyter_book_version: INSERT
+jupyter_book_version: "0.6.2"
 
 theme: jekyll-theme-minimal
