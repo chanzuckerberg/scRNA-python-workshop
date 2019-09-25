@@ -25,7 +25,7 @@ Not everyone who uses Anaconda is a biologist. As a result, some biology-specifi
 5. In the bottom text box, type `bioconda` and press `Enter`
 6. Press `Update channels`
 
-<img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-channel.png" width=700>
+<img src="../figures/anaconda-channel.png" width=700>
 
 ### 3. Download the course config file
 
@@ -38,7 +38,7 @@ To handle installation of all the Python packages required for the workshop (bot
 5. Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop.yaml` file you just downloaded
 6. Press `Import`
 
-<img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-env.png" width=700>
+<img src="../figures/anaconda-env.png" width=700>
 
 ### 4. Check your installation
 
@@ -48,7 +48,7 @@ To handle installation of all the Python packages required for the workshop (bot
 4. Click on the green `play` button that appears
 5. Select `Open with Jupyter Notebook` from the list
 
-<img src="https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/content/figures/anaconda-jupyter.png" width=700>
+<img src="../figures/anaconda-jupyter.png" width=700>
 
 You should get a browser tab that says "Jupyter" at the top and lists all the files on your computer. This might not seem like much, but is all you need to get started! :)
 
