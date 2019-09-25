@@ -1,0 +1,408 @@
+---
+interact_link: content/preprocessing/00-tabula-muris.ipynb
+kernel_name: python3
+has_widgets: false
+title: |-
+  Tabula muris
+prev_page:
+  url: /intro/overview.html
+  title: |-
+    Workflow overview
+next_page:
+  url: /preprocessing/01-basic-qc.html
+  title: |-
+    Quality control
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Tabula-Muris">Tabula Muris<a class="anchor-link" href="#Tabula-Muris"> </a></h1><h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>To give you hands-on experience analyzing a single-cell RNASeq dataset from start to finish, we will be using data from <a href="https://tabula-muris.ds.czbiohub.org/">Tabula Muris</a> as an example. The Tabula Muris is a collaborative effort to profile every mouse tissue at a single-cell level. The full dataset includes both high throughput but low-coverage 10X data and lower throughput but high-coverage Smartseq2 data.</p>
+<p>For this workshop, we will be using the Smartseq2 data from the mouse brain. This data consists of:</p>
+<ol>
+<li>an <strong>expression matrix</strong> where each column corresponds to a gene (or transcript) and each row corresponds to a single cell  </li>
+<li>a table of <strong>metadata</strong> describing each cell</li>
+</ol>
+<h2 id="Downloading-the-data">Downloading the data<a class="anchor-link" href="#Downloading-the-data"> </a></h2><p>You can find the prepared expression matrix and metadata <a href="INSERT LINK">here</a>. You should save these files in the directory <code>scRNA-couse/content/data/</code>.</p>
+<h2 id="Reading-the-data">Reading the data<a class="anchor-link" href="#Reading-the-data"> </a></h2><p>We can now read in the count matrix from the comma-separated file. Then inspect the resulting dataframe:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1">## load in the pandas library for working with dataframes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## tell pandas to make a new DataFrame with the contents of `brain_counts.csv`. This might take a minute.</span>
+<span class="n">count_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/brain_counts.csv&#39;</span><span class="p">,</span> <span class="c1"># where to find the data</span>
+                              <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># use the first column to label the rows (the &#39;index&#39;)</span>
+
+<span class="c1">## print the first 5 rows of our dataframe</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">())</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>                         0610005C13Rik  0610007C21Rik  0610007L01Rik  \
+A1.B003290.3_38_F.1.1                0            125             16   
+A1.B003728.3_56_F.1.1                0              0              0   
+A1.MAA000560.3_10_M.1.1              0            348              0   
+A1.MAA000564.3_10_M.1.1              0             41             36   
+A1.MAA000923.3_9_M.1.1               0             53              0   
+
+                         0610007N19Rik  0610007P08Rik  0610007P14Rik  \
+A1.B003290.3_38_F.1.1                0              0              0   
+A1.B003728.3_56_F.1.1                0              0            324   
+A1.MAA000560.3_10_M.1.1              0              0              5   
+A1.MAA000564.3_10_M.1.1              0              0             24   
+A1.MAA000923.3_9_M.1.1               0              0              0   
+
+                         0610007P22Rik  0610008F07Rik  0610009B14Rik  \
+A1.B003290.3_38_F.1.1                0              0              0   
+A1.B003728.3_56_F.1.1                0              0              0   
+A1.MAA000560.3_10_M.1.1              0              0              0   
+A1.MAA000564.3_10_M.1.1              0              0              0   
+A1.MAA000923.3_9_M.1.1               0              0              0   
+
+                         0610009B22Rik  ...  Zxdb  Zxdc  Zyg11a  Zyg11b  Zyx  \
+A1.B003290.3_38_F.1.1                0  ...     0     0       0       0    0   
+A1.B003728.3_56_F.1.1                0  ...     0     0       0       0    0   
+A1.MAA000560.3_10_M.1.1              0  ...     0     0       0       0    0   
+A1.MAA000564.3_10_M.1.1             14  ...     0     0       0       0  125   
+A1.MAA000923.3_9_M.1.1               0  ...     0     0       0      81    0   
+
+                         Zzef1  Zzz3  a  l7Rn6  zsGreen_transgene  
+A1.B003290.3_38_F.1.1        0     0  0     54                  0  
+A1.B003728.3_56_F.1.1        0     0  0      0                  0  
+A1.MAA000560.3_10_M.1.1    195     0  0    113                  0  
+A1.MAA000564.3_10_M.1.1      0     1  0      0                  0  
+A1.MAA000923.3_9_M.1.1       0     0  0      0                  0  
+
+[5 rows x 23433 columns]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>What do the column names represent? What do the row names represent? How many cells and genes are in this dataset?</p>
+<p>Hint: need some help? Try <code>help(pd.DataFrame.shape)</code>.</p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+The column names represent genes. 
+The row names represent unique cell identifiers that were assigned by the authors of the dataset.
+<p>
+We can find out how many genes and cells are in the dataset by asking for its <code>shape</code>:  <br>
+<code>print(count_dataframe.shape)</code><br>
+gives:<br>
+<code>(3401, 23433)</code>
+<p>
+which represents <code>(N rows, N columns)</code>.
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Reading-the-metadata">Reading the metadata<a class="anchor-link" href="#Reading-the-metadata"> </a></h2><p>The authors have also provided metadata describing each cell. This metadata is stored in a separate file, <code>brain_metadata.csv</code>. We can load it into a dataframe and inspect it, just like we did for the count data.</p>
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Load the metadata from the csv file into a pandas dataframe called <code>metadata_dataframe</code>. Does it have the same dimensions and index as the <code>counts_dataframe</code>?</p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+First, we need to load in the metadata.<br>
+<code>metadata_dataframe = pd.read_csv('../data/brain_metadata.csv', # where to find the data
+                           index_col=0) # use the first column as the index</code>
+
+<p>
+Let's take a peak at the resulting dataframe to make sure it looks correct. <br>
+<code>print(metadata_dataframe.shape)</code><br>
+<code>>>> (3401, 5)</code><br>
+We have 5 columns of information about 3,401 cells. Sounds reasonable.
+
+<p>
+Let's take a closer look and inspect the first few rows:<br>
+<code>print(metadata_dataframe.head())</code><br>
+<code>>>>                        cell_ontology_class    subtissue mouse.sex mouse.id  \
+cell                                                                          
+A1.B003290.3_38_F.1.1             astrocyte     Striatum         F   3_38_F   
+A1.B003728.3_56_F.1.1             astrocyte     Striatum         F   3_56_F   
+A1.MAA000560.3_10_M.1.1     oligodendrocyte       Cortex         M   3_10_M   
+A1.MAA000564.3_10_M.1.1    endothelial cell     Striatum         M   3_10_M   
+A1.MAA000923.3_9_M.1.1            astrocyte  Hippocampus         M    3_9_M   
+                        plate.barcode  
+cell                                   
+A1.B003290.3_38_F.1.1         B003290  
+A1.B003728.3_56_F.1.1         B003728  
+A1.MAA000560.3_10_M.1.1     MAA000560  
+A1.MAA000564.3_10_M.1.1     MAA000564  
+A1.MAA000923.3_9_M.1.1      MAA000923</code>
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>To get a sense for what is in this dataset, let's look at the summary of each metadata column.</p>
+<ol>
+<li>How many cells from each <code>subtissue</code> label are in this dataset? <br>
+_Hint: try running <code>help(pd.value_counts())</code> to get started_  <p></li>
+<li>Using a <code>for</code> loop, repeat this counting procedure to summarize each of the metadata columns.  <br>
+_Hint: you can access all the column names in the dataframe with <code>columns = metadata_dataframe.columns.values</code>_  </li>
+</ol>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+1. We can count the number of times each value appears in a column like this:<br>
+    <code>print(pd.value_counts(metadata_dataframe['subtissue']))</code><br>
+    <code>>>>        
+Cortex         1149
+Hippocampus     976
+Striatum        723
+Cerebellum      553
+Name: subtissue, dtype: int64</code>
+    <p>
+2. To repeat this for each column in the dataframe, we can use a <code>for</code> loop:<br>
+<code>for column in metadata_dataframe.columns.values:
+    print(pd.value_counts(metadata_dataframe[column]))</code>
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Building-an-AnnData-object">Building an AnnData object<a class="anchor-link" href="#Building-an-AnnData-object"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now have two dataframes, containing the counts and metadata from the Tabula Muris brain dataset. To keep these organized, we'll use a <strong>data structure</strong> called <strong>AnnData</strong>. AnnData stands for "annotated data," and is the standard format used by the analysis library, <strong>SCANPY</strong>.</p>
+<p>AnnData uses some generalized vocabulary to describe cells and genes: they refer to cells as <strong>observations</strong> and genes as <strong>variables</strong>. This data structure has four areas where we can store information:</p>
+<p><img src="../figures/anndata.svg" alt="Drawing" style="width: 500px;"/></p>
+<p><code>AnnData.X</code> stores the count matrix<br>
+<code>AnnData.obs</code> stores metadata about the observations (cells)<br>
+<code>AnnData.var</code> stores metadata about the variables (genes)<br>
+<code>AnnData.uns</code> stores any additional, unstructured information we decide to attach later</p>
+<p>Here, we have a count matrix and metadata that describes each cell, so we will use the <code>.X</code> and <code>.obs</code> portions of the AnnData structure.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span> <span class="c1"># import the scanpy library that tells Python how an AnnData data structure works</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># help(sc.AnnData)</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">AnnData</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">count_dataframe</span><span class="p">,</span> <span class="n">obs</span> <span class="o">=</span> <span class="n">metadata_dataframe</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>AnnData object with n_obs × n_vars = 3401 × 23433 
+    obs: &#39;cell_ontology_class&#39;, &#39;subtissue&#39;, &#39;mouse.sex&#39;, &#39;mouse.id&#39;, &#39;plate.barcode&#39;
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Labeling-spike-ins">Labeling spike-ins<a class="anchor-link" href="#Labeling-spike-ins"> </a></h3><p>Because this is smartseq2 data, we may have spike-ins. These gene names start with <code>ERCC</code>. We can label them in <code>adata.var</code> as a gene annotation.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">is_spike_in</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">number_of_spike_ins</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">gene_name</span> <span class="ow">in</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;ERCC&#39;</span> <span class="ow">in</span> <span class="n">gene_name</span><span class="p">:</span>
+        <span class="n">is_spike_in</span><span class="p">[</span><span class="n">gene_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># record that we found a spike-in</span>
+        <span class="n">number_of_spike_ins</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># bump the counter</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">is_spike_in</span><span class="p">[</span><span class="n">gene_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># record that this was not a spike-in</span>
+        
+<span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;ERCC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">is_spike_in</span><span class="p">)</span> <span class="c1"># because the index of adata.var and the keys of is_spike_in match, anndata will take care of matching them up</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;found this many spike ins: &#39;</span><span class="p">,</span> <span class="n">number_of_spike_ins</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>found this many spike ins:  92
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we've finished building our AnnData object, we can save it in a file for later use like so:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;../data/brain_raw.h5ad&#39;</span><span class="p">)</span> <span class="c1">## the h5ad extension is AnnData-specific</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>... storing &#39;cell_ontology_class&#39; as categorical
+... storing &#39;subtissue&#39; as categorical
+... storing &#39;mouse.sex&#39; as categorical
+... storing &#39;mouse.id&#39; as categorical
+... storing &#39;plate.barcode&#39; as categorical
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+</main>

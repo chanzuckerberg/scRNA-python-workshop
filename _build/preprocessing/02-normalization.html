@@ -1,0 +1,443 @@
+---
+interact_link: content/preprocessing/02-normalization.ipynb
+kernel_name: python3
+has_widgets: false
+title: |-
+  Normalization and PCA
+prev_page:
+  url: /preprocessing/01-basic-qc.html
+  title: |-
+    Quality control
+next_page:
+  url: /analysis/03-dimensionality-reduction.html
+  title: |-
+    Dimensionality reduction
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Normalization-&amp;-PCA">Normalization &amp; PCA<a class="anchor-link" href="#Normalization-&amp;-PCA"> </a></h1><h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Single cell data is <strong>messy</strong>. It often contains noise from technical artefacts, batch effects, and other confounders. Before analyzing our data, we need to assess and correct for as much of this unwanted variation as possible.</p>
+<p>There are sophisticated methods for correcting complex sources of variation; we refer to the excellent guide <a href="https://www.embopress.org/doi/full/10.15252/msb.20188746">here</a> for an overview. In this tutorial, we'll focus on the most fundamental sources of unwanted variation, and simple but effective ways to handle this.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Load-data">Load data<a class="anchor-link" href="#Load-data"> </a></h2><p>We'll continue to work with the output of our previously QC'd tabula muris senis brain dataset, and use PCA to visualize the results.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/brain_qc.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Principle-components-analysis">Principle components analysis<a class="anchor-link" href="#Principle-components-analysis"> </a></h2><p><strong>Dimensionality reduction methods</strong> seek to take a large set of variables and return a smaller set of <strong>components</strong> that still contain most of the information in the original dataset.</p>
+<p>One of the simplest forms of dimensionality reduction is <strong><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a></strong>. Principal component analysis (PCA) is a mathematical procedure that transforms a number of possibly correlated (e.g., expression of genes in a network) variables into a (smaller) number of uncorrelated variables called <strong>principal components ("PCs")</strong>.</p>
+<p>Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from <a href="http://www.nlpca.org/pca_principal_component_analysis.html">here</a>).</p>
+<p><img src="../figures/pca.png" alt="PCA" style="width: 500px;"/></p>
+<p>Now that we have a clean expression matrix, we can use PCA to visualize an overview of the data and assess confounding factors. <code>SCANPY</code> provides several very useful functions to simplify visualisation.</p>
+<p>Let's first peek at our data before normalization:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">pca_overview</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;mouse.id&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_5_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_5_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_5_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The first plot has a strange, very linear first PC (which captures the most variation in the dataset). This suggests that we have outliers in our data.</p>
+<p>The next row of plots shows the <strong>loadings</strong>, which indicate how strongly each variable in the original data contributes to each principle component. Here, we see that the first PC is strongly determined by the expression of just a small number of genes.</p>
+<p>The bottom plot shows us that the first principle component captures the vast majority of the variation in the raw data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Normalizing-cell-library-size">Normalizing cell library size<a class="anchor-link" href="#Normalizing-cell-library-size"> </a></h2><p>Library sizes vary because scRNA-seq data is often sequenced on highly multiplexed platforms, and the total reads which are derived from each cell may differ substantially. Some quantification methods
+(eg. <a href="http://cole-trapnell-lab.github.io/cufflinks/"><code>Cufflinks</code></a>, <a href="http://deweylab.github.io/RSEM/"><code>RSEM</code></a>) incorporate library size when determining gene expression estimates and thus do not require this normalization. However, if another quantification method was used then library size must be corrected for.</p>
+<p>There are two main approaches to this correction. Many methods use a simple linear scaling to adjust counts such that each cell (row) has about the same total library size. Examples include converting to counts per million (<code>CPM</code>) and closely related methods such as <code>scran</code>. While simple, these approaches do a reasonable job of correcting for differences in library size.</p>
+<p>Other methods are more complex, and generally involve parametric modeling of count data to perform nonlinear normalization. These methods are useful when there are more complex sources of unwanted variation (e.g., for highly heterogeneous populations of cells with different sizes).</p>
+<p>In this lesson, we'll stick to the simple, linear scaling methods. We recommend reviewing <a href="http://scholar.google.com/scholar_lookup?hl=en&amp;volume=8&amp;publication_year=2019&amp;pages=315-328&amp;journal=Cell+Syst&amp;author=MB+Cole&amp;author=D+Risso&amp;author=A+Wagner&amp;author=D+DeTomaso&amp;author=J+Ngai&amp;author=E+Purdom&amp;author=S+Dudoit&amp;author=N+Yosef&amp;title=Performance+assessment+and+selection+of+normalization+procedures+for+single%E2%80%90cell+RNA%E2%80%90seq">Cole et al., 2019</a> for an in-depth comparison of normalization methods.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="CPM">CPM<a class="anchor-link" href="#CPM"> </a></h3><p>The simplest way to normalize this data is to convert it to counts per
+million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</strong> (the sum of all counts in the row), then multiplying by
+1,000,000. Note that this method assumes that each cell originally contained the same amount of RNA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata_cpm</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># apply this to a copy so we can compare methods</span>
+<span class="n">adata_cpm</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">adata_cpm</span> <span class="c1"># store a copy of the raw values before normalizing</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_per_cell</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">,</span> 
+                         <span class="n">counts_per_cell_after</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">pca_overview</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;mouse.id&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_10_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_10_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_10_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A potential drawback of <strong>CPM</strong> is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes. One way to mitigate this is to exclude highly expressed genes from the size factor estimation.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.normalize_total()</code> to normalize with counts per million, excluding highly expressed genes from the size factor calculation. 
+_Hint: start with the Parameters list in <code>help(sc.pp.normalize_total())</code></p>
+<p>Visualize the output with PCA. How much difference did this make? Which method do you prefer for this dataset?</p>
+<p><p></p>
+<details>
+<summary><h3>Solution</h3></summary>
+<code>
+adata_cpm_ex = adata.copy()
+sc.pp.normalize_total(adata_cpm_ex, target_sum=1e6, exclude_highly_expressed=True)
+sc.pp.pca(adata_cpm_ex)
+sc.pl.pca_overview(adata_cpm_ex)
+
+This is more reasonable than before: the second component now explains some of the variance.
+</code>
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Other linear approachehs to correcting for library size include:</p>
+<ul>
+<li>Downsampling, which randomly samples reads from each cell until a set threshold is reached</li>
+<li>RPKM and related methods, which correct for transcript length  </li>
+</ul>
+<p>While we won't take the time to walk through these today, you can see a head-to-head comparison <a href="https://scrnaseq-course.cog.sanger.ac.uk/website/cleaning-the-expression-matrix.html#normalisations">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Normalizing-gene-expression">Normalizing gene expression<a class="anchor-link" href="#Normalizing-gene-expression"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we saw earlier, this dataset is dominated by a small number of highly expressed genes.</p>
+<p>One way to address this is by <strong>centering and scaling</strong> the gene expression values (you may remember a "z-score" from stats class). Importantly, doing this places an equal weight on each gene for downstream analysis. Depending on your biological question, this may or may not be appropriate. The advantage of doing so, however, is that it de-emphasizes the small handful of genes that are differentially expressed at high levels, which are currently dominating the data.</p>
+<p>First, we take the log(1+x) of each value. The +1 makes sure that 0 values in the original data still map to 0 in log space (and prevents us from trying to take the log of 0). This makes the expression values more closely approximate a Gaussian distribution, which is an assumption inherent to many downstream analysis methods.</p>
+<p>Then for each gene, we subtract the mean expression value and divide by the standard deviation.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">pca_overview</span><span class="p">(</span><span class="n">adata_cpm</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;plate.barcode&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_16_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_16_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_16_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This looks much better: the first plot shows more Gaussian-looking groups of cells. The second row of plots shows well-distributed loadings, indicating that each PC is driven by multiple genes. And the final plot shows that Each of the first ~5-10 components captures some of the variance in the data.</p>
+<p>Let's write our normalized data to file for later use.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata_cpm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;../data/brain_normalized.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+</main>

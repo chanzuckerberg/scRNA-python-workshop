@@ -1,0 +1,135 @@
+---
+interact_link: content/analysis/05-diffexp.ipynb
+kernel_name: python3
+has_widgets: false
+title: |-
+  Differential expression
+prev_page:
+  url: /analysis/04-clustering.html
+  title: |-
+    Clustering
+next_page:
+  url: 
+  title: |-
+    
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Differential-expression-&amp;-cluster-annotation">Differential expression &amp; cluster annotation<a class="anchor-link" href="#Differential-expression-&amp;-cluster-annotation"> </a></h1><h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Now that we've assigned cells into clusters, we'd like to understand what makes each cluster different from other cells in the dataset, or to annotate clusters according to their cell types (as has been previously done for this dataset).</p>
+<p>There are several approaches to this task:</p>
+<ul>
+<li>Look for upregulation of marker genes for cell types of interest (compared to the rest of the dataset)  </li>
+<li>Compare the complete gene expression profiles between groups  </li>
+<li>Use automated methods to compare cells of interest to databases of cell type expression profiles to combine clustering and annotation  </li>
+</ul>
+<p>Automated methods are a promising advance, but are not yet able to replace careful human curation.</p>
+<p>For well-defined cell types, we expect marker genes to show large differences in expression between the cell type of interest and the rest of the dataset, allowing us to use simple methods. We'll focus on this approach for this workshop, while building intuition that is broadly applicable to other approaches.</p>
+<h2 id="Comparing-distributions">Comparing distributions<a class="anchor-link" href="#Comparing-distributions"> </a></h2><p>Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.</p>
+<p>There are two main approaches to comparing distributions: parametric and nonparametric.</p>
+<p>For parametric comparisons, we can infer parameters of a distribution so that it matches the expression values in each group as best as possible. We can then ask whether there are significant differences in the parameters that best describe each group.</p>
+<p>Alternatively, we can use a non-parametric test which does not assume that expression values follow any particular distribution. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.</p>
+<p>Here, we'll demonstrate N approaches to parametric comparisons between groups.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise:-building-intuition-about-distributions">Exercise: building intuition about distributions<a class="anchor-link" href="#Exercise:-building-intuition-about-distributions"> </a></h3><p>Let's revisit some foundational statistics to tap into some intuition you use all the time.</p>
+<p>Say you're looking for a restaurant for dinner, and you are comparing two different restaurant options. If you see reviews that look like this, would you think one is better than the other? How sure are you?</p>
+<p><img src="../figures/distrib-small-n.png"></p>
+<p>Now, what if you saw these sets of reviews? Do you think one is better?</p>
+<p><img src="../figures/distrib-large-n.png"></p>
+<p>Finally, what about this set of reviews?</p>
+<p><img src="../figures/distrib-giant-n.png"></p>
+<p>Chat with your neighbor: what factors about the reviews influence your assessment of which restaurant is better? How could this apply to your scRNAseq data?</p>
+<p>
+
+<p><details>
+    <summary><h3>Discussion</h3></summary>
+    Looking at the first set of reviews, my conclusion would be "Maybe the right one is better? But there aren't many reviews yet, so I'm not sure." 
+    <p>
+    Once we look at the second set of reviews, I would have more confidence that the restaurant on the right is superior, because there are more reviews. 
+    <p>
+    Looking at the final set of reviews, we can be quite confident that there is a "real" difference in the mean review score, but the magnitude of this difference is small. 
+    <p>
+    This is a very important distinction: a t-test compares our data to the null hypothesis that the means of two distributions are <strong>equal</strong>. This accounts for the mean, standard deviation, and sample size of the two distributions. However, a p-value alone does not tell us anything about the <em>magnitude</em> of that difference: with large N, even very small (and biologically meaningless) differences in expression values can still return very "statistically significant" p-values.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Load-data">Load data<a class="anchor-link" href="#Load-data"> </a></h2><p>Let's apply this intuition to our data. We'll continue working with the mouse brain data with assigned clusters.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/brain_clusters.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw.">Important note! For differential expression, we need to use the <em>raw</em> values stored in <code>adata.raw</code>.<a class="anchor-link" href="#Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw."> </a></h3><p>With differential expression, we want to account for both the center and spread of the expression in each group. Recall that when we normalized our values, we standardized the distribution of each gene across cells to be centered at 0 and scaled with variance 1. So, when calculating differential expression, we should use the raw values (post-QC, pre-normalization). We saved these in <code>adata.raw</code> earlier on.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This has several tricky questions embedded in it:</p>
+<ul>
+<li>What constitutes a cell type? With what granularity? (E.g., lymphocytes &gt; T cells &gt; CD4+ T cells)  </li>
+<li>How does cell state interact with cell type? (E.g., when annotating in/activated T cells)  </li>
+<li></li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+</main>
