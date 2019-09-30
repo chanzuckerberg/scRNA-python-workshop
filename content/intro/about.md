@@ -41,11 +41,11 @@ We recommend the following introductory materials:
 
 ## Recommended reading
 
-### [Analysis of single cell RNA seq data](https://scrnaseq-course.cog.sanger.ac.uk/website/index.html)
+## [Analysis of single cell RNA seq data](https://scrnaseq-course.cog.sanger.ac.uk/website/index.html)
 
 The original source of much of the course content; as a 2-day course, it includes a broader overview of analytical methods and a guide to generating the expression matrix from raw data. While its examples are implemented in R, the conceptual underpinnings are broadly applicable.
 
-### [Current best practices in single‐cell RNA‐seq analysis: a tutorial](https://www.embopress.org/doi/full/10.15252/msb.20188746)
+## [Current best practices in single‐cell RNA‐seq analysis: a tutorial](https://www.embopress.org/doi/full/10.15252/msb.20188746)
 
 Clear explanations of many of the methodological tradeoffs and our current understanding of best practices. Includes an in-depth tutorial, implemented primarily in Python.
 
