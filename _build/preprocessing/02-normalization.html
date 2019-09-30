@@ -288,18 +288,17 @@ million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</st
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.normalize_total()</code> to normalize with counts per million, excluding highly expressed genes from the size factor calculation. 
 _Hint: start with the Parameters list in <code>help(sc.pp.normalize_total())</code></p>
 <p>Visualize the output with PCA. How much difference did this make? Which method do you prefer for this dataset?</p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
-<code>
-adata_cpm_ex = adata.copy()
-sc.pp.normalize_total(adata_cpm_ex, target_sum=1e6, exclude_highly_expressed=True)
-sc.pp.pca(adata_cpm_ex)
-sc.pl.pca_overview(adata_cpm_ex)
-
+<code>adata_cpm_ex = adata.copy() # make a copy so we can compare results
+sc.pp.normalize_total(adata_cpm_ex, target_sum=1e6, exclude_highly_expressed=True) # normalize
+sc.pp.pca(adata_cpm_ex) # run pca
+sc.pl.pca_overview(adata_cpm_ex) # plot pca</code>
+<p/>
 This is more reasonable than before: the second component now explains some of the variance.
-</code>
 </details>
+</p>
 </div>
 </div>
 </div>
@@ -309,7 +308,7 @@ This is more reasonable than before: the second component now explains some of t
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Other linear approachehs to correcting for library size include:</p>
+<p>Other linear approaches to correcting for library size include:</p>
 <ul>
 <li>Downsampling, which randomly samples reads from each cell until a set threshold is reached</li>
 <li>RPKM and related methods, which correct for transcript length  </li>
