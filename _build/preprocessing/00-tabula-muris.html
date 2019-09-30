@@ -129,19 +129,20 @@ A1.MAA000923.3_9_M.1.1       0     0  0      0                  0
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>What do the column names represent? What do the row names represent? How many cells and genes are in this dataset?</p>
 <p>Hint: need some help? Try <code>help(pd.DataFrame.shape)</code>.</p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 The column names represent genes. 
 The row names represent unique cell identifiers that were assigned by the authors of the dataset.
-<p>
+<p/>
 We can find out how many genes and cells are in the dataset by asking for its <code>shape</code>:  <br>
 <code>print(count_dataframe.shape)</code><br>
 gives:<br>
 <code>(3401, 23433)</code>
-<p>
+<p/>
 which represents <code>(N rows, N columns)</code>.
 </details>
+</p>
 </div>
 </div>
 </div>
@@ -153,7 +154,7 @@ which represents <code>(N rows, N columns)</code>.
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Reading-the-metadata">Reading the metadata<a class="anchor-link" href="#Reading-the-metadata"> </a></h2><p>The authors have also provided metadata describing each cell. This metadata is stored in a separate file, <code>brain_metadata.csv</code>. We can load it into a dataframe and inspect it, just like we did for the count data.</p>
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Load the metadata from the csv file into a pandas dataframe called <code>metadata_dataframe</code>. Does it have the same dimensions and index as the <code>counts_dataframe</code>?</p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 First, we need to load in the metadata.<br>
@@ -166,7 +167,7 @@ Let's take a peak at the resulting dataframe to make sure it looks correct. <br>
 <code>>>> (3401, 5)</code><br>
 We have 5 columns of information about 3,401 cells. Sounds reasonable.
 
-<p>
+</p><p>
 Let's take a closer look and inspect the first few rows:<br>
 <code>print(metadata_dataframe.head())</code><br>
 <code>>>>                        cell_ontology_class    subtissue mouse.sex mouse.id  \
@@ -183,7 +184,9 @@ A1.B003728.3_56_F.1.1         B003728
 A1.MAA000560.3_10_M.1.1     MAA000560  
 A1.MAA000564.3_10_M.1.1     MAA000564  
 A1.MAA000923.3_9_M.1.1      MAA000923</code>
+    </p>
 </details>
+</p>
 </div>
 </div>
 </div>
@@ -200,7 +203,7 @@ _Hint: try running <code>help(pd.value_counts())</code> to get started_  <p></li
 <li>Using a <code>for</code> loop, repeat this counting procedure to summarize each of the metadata columns.  <br>
 _Hint: you can access all the column names in the dataframe with <code>columns = metadata_dataframe.columns.values</code>_  </li>
 </ol>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 1. We can count the number of times each value appears in a column like this:<br>
@@ -211,11 +214,12 @@ Hippocampus     976
 Striatum        723
 Cerebellum      553
 Name: subtissue, dtype: int64</code>
-    <p>
+    <p/>
 2. To repeat this for each column in the dataframe, we can use a <code>for</code> loop:<br>
 <code>for column in metadata_dataframe.columns.values:
     print(pd.value_counts(metadata_dataframe[column]))</code>
 </details>
+    </p>
 </div>
 </div>
 </div>

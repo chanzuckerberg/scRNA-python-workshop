@@ -197,17 +197,17 @@ assigned and each cell is assigned to its nearest cluster:</p>
 <li><p>Repeat this with several different values for the <code>resoltion</code> parameter. How does this effect your results?</p>
 </li>
 </ol>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
-<code>
-sc.tl.louvain(adata)
+<code>sc.tl.louvain(adata)
 sc.pl.umap(adata, color='louvain')
 rand_index = adjusted_rand_score(adata.obs['cell_ontology_class'], adata.obs['louvain'])
 print('The rand index is ', round(rand_index, 2))</code>
-<p>    
+<p/>    
 The low rand index with the default resolution parameter is quite low (0.34), but this increases to 0.9 when we set <code>resolution=0.1</code>.  
 </details>
+</p>
 </div>
 </div>
 </div>
