@@ -52,7 +52,7 @@ To handle installation of all the Python packages required for the workshop (bot
 
 You should get a browser tab that says "Jupyter" at the top and lists all the files on your computer. This might not seem like much, but is all you need to get started! :)
 
-## **If this does not work, please come to office hours before class so the CZI computational biology team can help you**
+### **If this does not work, please come to office hours before class so the CZI computational biology team can help you**
 
 ### 5. Download course files
 
