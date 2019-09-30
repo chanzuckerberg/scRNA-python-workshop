@@ -377,16 +377,17 @@ cells in the tail of the distribution (fewer than ~1000 detected genes).</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Plot the distribution of <code>pct_counts_ERCC</code> in this dataset. What do you think is a reasonable threshold?</p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 <code>plt.hist(cell_qc_dataframe['pct_counts_ERCC'], bins=1000)
 plt.xlabel('Percent counts ERCC')
 plt.ylabel('N cells')
 plt.axvline(10, color='red')</code>
-<p>    
+<p/>    
 Placing a threshold is always a judgement call. Here, the majority of cells have less than 10% ERCC counts, but there's a long tail of cells that have very high spike-in counts; these are likely dead cells and should be removed. 
 </details>
+</p>
 </div>
 </div>
 </div>
@@ -438,7 +439,7 @@ Placing a threshold is always a judgement call. Here, the majority of cells have
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.filter_cells()</code> to filter cells with fewer than 50,000 reads. Repeat to remove those with fewer than 750 genes detected. How many cells does this remove?<br>
 _Hint: start with the Parameters list in <code>help(sc.pp.filter_cells)</code></p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 <code>print('Started with: \n', adata)
@@ -446,6 +447,7 @@ sc.pp.filter_cells(adata, min_genes = 750)
 sc.pp.filter_cells(adata, min_counts = 50000)
 print('Finished with: \n', adata)</code>
 </details>
+</p>
 </div>
 </div>
 </div>
@@ -568,7 +570,7 @@ print('Finished with: \n', adata)</code>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.filter_genes()</code> to filter genes according to the criteria above. How many genes does this remove?<br>
 _Hint: start with the Parameters list in <code>help(sc.pp.filter_genes)</code></p>
-<p><p></p>
+<p>
 <details>
 <summary><h3>Solution</h3></summary>
 <code>print('Started with: \n', adata)
@@ -576,6 +578,7 @@ sc.pp.filter_genes(adata, min_cells = 2)
 sc.pp.filter_genes(adata, min_counts = 10)
 print('Finished with: \n', adata)</code>
 </details>
+</p>
 </div>
 </div>
 </div>
