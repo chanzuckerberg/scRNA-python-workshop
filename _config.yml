@@ -55,7 +55,7 @@ jupyterhub_interact_text: "" # The text that interact buttons will contain.
 
 # Binder link settings
 use_binder_button: true # If 'true', add a binder button for interactive links
-binderhub_url: "https://mybinder.org/v2/gh/chanzuckerberg/scRNA-python-workshop/master" # The URL for your BinderHub. If no URL, use ""
+binderhub_url: "" # The URL for your BinderHub. If no URL, use ""
 binder_repo_base: "https://github.com/chanzuckerberg/scRNA-python-workshop" # The site on which the textbook repository is hosted
 binder_repo_org: "chanzuckerberg" # The username or organization that owns this repository
 binder_repo_name: "scRNA-python-workshop" # The name of the repository on the web
