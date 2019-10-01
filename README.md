@@ -1,6 +1,6 @@
 # Analysis of single cell RNA-seq data (Python)
 
-# [View the course content here](https://github.com/chanzuckerberg/scRNA-python-workshop)
+# [View the course content here](https://chanzuckerberg.github.io/scRNA-python-workshop/)
 
 ## Course goals
 
