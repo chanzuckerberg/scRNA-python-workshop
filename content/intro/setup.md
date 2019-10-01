@@ -56,7 +56,19 @@ You should get a browser tab that says "Jupyter" at the top and lists all the fi
 
 ### 5. Download course files
 
-We'll update this once the curriculum has been finalized; please check back soon.
+#### For the imaging track
+
+Go to [https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging](https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging)
+
+#### For the single cell track
+
+Go to [https://github.com/chanzuckerberg/scRNA-python-workshop](https://github.com/chanzuckerberg/scRNA-python-workshop)
+
+#### Clone or download contents
+
+If you are comfortable cloning a repository with git, we encourage you to do so. Otherwise, click the green "clone or download" button and choose "download zip". We encourage you to do this the evening before class, as we may make some last-minute updates to the material.
+
+<img src="../figures/git-download.png" width=700>
 
 ### Bonus: install fun visualization tools (optional)
 
@@ -68,14 +80,16 @@ We'll update this once the curriculum has been finalized; please check back soon
 
 #### For the imaging track:
 
-6. In the terminal window that opens, copy and paste the following and press `Enter`:  
+6. In the terminal window that opens, copy and paste the following and press `Enter`:
+
    `python3 -m pip install napari`
 
 To test your installation of napari, type `napari` in the next terminal line and press `Enter`. You should see an application window open up.
 
 #### For the single-cell analysis track:
 
-6. In the terminal window that opens, copy and paste the following and press `Enter`:  
+6. In the terminal window that opens, copy and paste the following and press `Enter`:
+
    `python3 -m pip install cellxgene`
 
 To test your installation of cellxgene, type `cellxgene` in the next terminal line and press `Enter`. You should see something like this:  
@@ -87,4 +101,4 @@ Commands:
 launch Launch the cellxgene data viewer.
 prepare Preprocesses data for use with cellxgene.</code>
 
-#### If this does not work, and you would like to try out the visualization tools in class, please come to office hours before class so we can help you.
+### **If this does not work, and you would like to try out the visualization tools in class, please come to office hours before class so we can help you.**
