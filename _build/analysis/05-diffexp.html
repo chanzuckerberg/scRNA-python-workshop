@@ -9,9 +9,9 @@ prev_page:
   title: |-
     Clustering
 next_page:
-  url: 
+  url: /analysis/06-exploratory.html
   title: |-
-    
+    Exploration with cellxgene
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 <main class="jupyter-page">
@@ -29,43 +29,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 </ul>
 <p>Automated methods are a promising advance, but are not yet able to replace careful human curation.</p>
 <p>For well-defined cell types, we expect marker genes to show large differences in expression between the cell type of interest and the rest of the dataset, allowing us to use simple methods. We'll focus on this approach for this workshop, while building intuition that is broadly applicable to other approaches.</p>
-<h2 id="Comparing-distributions">Comparing distributions<a class="anchor-link" href="#Comparing-distributions"> </a></h2><p>Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.</p>
-<p>There are two main approaches to comparing distributions: parametric and nonparametric.</p>
-<p>For parametric comparisons, we can infer parameters of a distribution so that it matches the expression values in each group as best as possible. We can then ask whether there are significant differences in the parameters that best describe each group.</p>
-<p>Alternatively, we can use a non-parametric test which does not assume that expression values follow any particular distribution. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.</p>
-<p>Here, we'll demonstrate N approaches to parametric comparisons between groups.</p>
-
-</div>
-</div>
-</div>
-</div>
-
-<div class="jb_cell">
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Exercise:-building-intuition-about-distributions">Exercise: building intuition about distributions<a class="anchor-link" href="#Exercise:-building-intuition-about-distributions"> </a></h3><p>Let's revisit some foundational statistics to build some intuition.</p>
-<p>In this example, we have two clusters of cells, and we want to determine if either or both clusters are X cell type.</p>
-<p>Whether or not we declare a gene "differentially expressed" is dependent on two factors: which group you're comparing to, and which statistical test you use to compare the distributions.</p>
-<p>Pitfalls:</p>
-<ul>
-<li>p-values can indicate difference, but not the <strong>magnitude</strong> of the difference: with high enough N, even very small differences can appear "significant."  </li>
-<li>remember that when we ran clustering, we pre-identified groups of cells that are different from one another. we're essentially 'double dipping' in those differences here, which can inflate p-values.</li>
-<li></li>
-</ul>
-
-<pre><code>This is a very important distinction: a t-test compares our data to the null hypothesis that the means of two distributions are **equal**. This accounts for the mean, standard deviation, and sample size of the two distributions. However, a p-value alone does not tell us anything about the *magnitude* of that difference: with large N, even very small (and biologically meaningless) differences in expression values can still return very "statistically significant" p-values. </code></pre>
-
-</div>
-</div>
-</div>
-</div>
-
-<div class="jb_cell">
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Load-data">Load data<a class="anchor-link" href="#Load-data"> </a></h2><p>Let's apply this intuition to our data. We'll continue working with the mouse brain data with assigned clusters.</p>
+<h2 id="Load-data">Load data<a class="anchor-link" href="#Load-data"> </a></h2><h3 id="Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw.">Important note! For differential expression, we need to use the <em>raw</em> values stored in <code>adata.raw</code>.<a class="anchor-link" href="#Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw."> </a></h3><p>With differential expression, we want to account for both the center and spread of the expression in each group. Recall that when we normalized our values, we standardized the distribution of each gene across cells to be centered at 0 and scaled with variance 1. So, when calculating differential expression, we should use the raw values (post-QC, pre-normalization). We saved these in <code>adata.raw</code> earlier on.</p>
 
 </div>
 </div>
@@ -80,11 +44,12 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
 <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/brain_clusters.h5ad&#39;</span><span class="p">)</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">var_names</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -98,7 +63,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw.">Important note! For differential expression, we need to use the <em>raw</em> values stored in <code>adata.raw</code>.<a class="anchor-link" href="#Important-note!-For-differential-expression,-we-need-to-use-the-raw-values-stored-in-adata.raw."> </a></h3><p>With differential expression, we want to account for both the center and spread of the expression in each group. Recall that when we normalized our values, we standardized the distribution of each gene across cells to be centered at 0 and scaled with variance 1. So, when calculating differential expression, we should use the raw values (post-QC, pre-normalization). We saved these in <code>adata.raw</code> earlier on.</p>
+<h2 id="Comparing-distributions">Comparing distributions<a class="anchor-link" href="#Comparing-distributions"> </a></h2><p>Differential expression algorithms represent various approaches to comparing the distribution of gene expression in one group versus another group. Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus, we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.</p>
 
 </div>
 </div>
@@ -109,12 +74,249 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This has several tricky questions embedded in it:</p>
-<ul>
-<li>What constitutes a cell type? With what granularity? (E.g., lymphocytes &gt; T cells &gt; CD4+ T cells)  </li>
-<li>How does cell state interact with cell type? (E.g., when annotating in/activated T cells)  </li>
-<li></li>
-</ul>
+<h3 id="Building-intuition">Building intuition<a class="anchor-link" href="#Building-intuition"> </a></h3><p>Let's revisit some foundational statistics to build some intuition.</p>
+<p>In this example, we have a cluster of interest, and we want to determine if they are astrocytes. Let's start by plotting the distibution of a marker gene's expression in the cluster compared to the rest of the dataset.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">astrocyte_marker</span> <span class="o">=</span> <span class="s1">&#39;Gja1&#39;</span> <span class="c1"># define genes of interest</span>
+<span class="n">housekeeping</span> <span class="o">=</span> <span class="s1">&#39;Chmp2a&#39;</span> 
+
+<span class="n">cluster2</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span><span class="p">]</span> <span class="c1"># Use a mask to subset dataset to cells assigned to cluster 2</span>
+<span class="n">not_cluster2</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;2&#39;</span><span class="p">]</span> <span class="c1"># All other cells</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster2_marker_exp</span> <span class="o">=</span> <span class="n">cluster2</span><span class="p">[</span><span class="n">astrocyte_marker</span><span class="p">]</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cluster2_marker_exp</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Cluster 2&#39;</span><span class="p">)</span> <span class="c1"># Plot distribution</span>
+
+<span class="n">not_cluster2_marker_exp</span> <span class="o">=</span> <span class="n">not_cluster2</span><span class="p">[</span><span class="n">astrocyte_marker</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">not_cluster2_marker_exp</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Not cluster 2&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span> <span class="c1"># Cut off at N=100 for visual clarity</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> expression&#39;</span><span class="o">%</span><span class="k">astrocyte_marker</span>) # label our axes
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;N cells&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.legend.Legend at 0x1a33c2c0d0&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/analysis/05-diffexp_5_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Just by eyeballing the two distributions, we can see that cells in this cluster express more of the marker gene than other cells in the dataset. However, we also see that these distributions overlap: some cells in the cluster don't express the gene at all, and some cells outside the cluster express it relatively highly.</p>
+<p>So, how do we decide whether this cluster is actually "differentially expressing" our marker gene?</p>
+<p>Because we expect the differences in expression to be relatively large for marker genes, we can use straightforward hypothesis testing methods to ask for the probability (p-value) that we would observe this level of differential expression if all these cells were, in fact, the same population (i.e., if the null hypothesis were true).</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">ttest_ind</span>
+
+<span class="n">ttest</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">cluster2_marker_exp</span><span class="p">,</span> 
+          <span class="n">not_cluster2_marker_exp</span><span class="p">,</span> 
+          <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># it&#39;s not necessarily fair to assume that these two populations have equal variance</span>
+          <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span> <span class="c1"># omit NaN values</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ttest</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Ttest_indResult(statistic=10.456174419645631, pvalue=2.5212453816250427e-23)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Exercise:-interpreting-differential-expression">Exercise: interpreting differential expression<a class="anchor-link" href="#Exercise:-interpreting-differential-expression"> </a></h2><p>Think - pair - share:</p>
+<p>1 - What is one piece of information that this result tells you?<br>
+2 - What is one piece of information you would like to know, but that the p-value doesn't tell you?<br>
+3 - Based on these results, do you think this cluster represents astrocytes? Why or why not?</p>
+<details><summary><h3>Solution</h3></summary>  
+1 - This result tells you that we would be very surprised if these two populations had no true difference in mean expression, given the observed sample.<br><br>
+2 - A t-test compares our data to the null hypothesis that the means of two distributions are **equal**. This accounts for the mean, standard deviation, and sample size of the two distributions. However, a p-value alone does not tell us anything about the *magnitude* of that difference: with large N, even very small (and biologically meaningless) differences in expression values can still return very "statistically significant" p-values. <br><br>  
+3 - This has several tricky questions embedded in it:  <br>
+* What constitutes a cell type? With what granularity? (E.g., lymphocytes > T cells > CD4+ T cells)  <br>
+* How does cell state interact with cell type? (E.g., when annotating in/activated T cells)  <br>
+Notably, although many cells in this cluster express the marker gene, there are many that don't. We should be careful before assuming that a cluster == a cell type!
+</details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h2><p>Choose two subsets of the data (remember to use the raw values!). Plot the distribution of your favorite gene, and run the same t-test. Are the results as-expected?</p>
+<p><details><summary><h3>Hints</h3></summary>
+1 - To remind yourself of the available metadata, run <code>print(adata)</code>  <br>
+2 - To subset the raw values based on metadata, use the following pattern:<br><br>
+    <code>variable = raw[ adata.obs[field] == value ]</code><br>
+3 - To check if a gene is in this dataset, use <code>print('Gene1' in raw.columns.values)</code> (pay attention to the gene name casing! :)</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Working-with-the-whole-dataset">Working with the whole dataset<a class="anchor-link" href="#Working-with-the-whole-dataset"> </a></h2><p>Scanpy has a very useful function for repeating this process of subsetting the dataset to one group and comparing it to the rest of the dataset. It then returns the genes that are most differentially expressed between that group and all others. Let's look at the genes that are most cell-type specific.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">rank_genes_groups</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="s1">&#39;cell_ontology_class&#39;</span><span class="p">,</span> <span class="n">use_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                        <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t-test_overestim_var&#39;</span><span class="p">,</span> <span class="n">n_genes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># compute differential expression</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">rank_genes_groups_tracksplot</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="s1">&#39;cell_ontology_class&#39;</span><span class="p">)</span> <span class="c1"># plot the result</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: overflow encountered in expm1
+  foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
+/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: invalid value encountered in expm1
+  foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
+/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: invalid value encountered in true_divide
+  foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/analysis/05-diffexp_11_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h2><p>Repeat this process for the <code>louvain</code> cluster assignments. How closely do these overlap? Does this jive with the results from our Rand Index assessment of cluster labels?</p>
+<p><details><summary><h3>Solution</h3></summary>
+<code>sc.tl.rank_genes_groups(adata, groupby='louvain', use_raw=True, 
+                        method='t-test_overestim_var', n_genes=10) # compute differential expression
+sc.pl.rank_genes_groups_tracksplot(adata, groupby='louvain') # plot the result</code></p>
 
 </div>
 </div>
