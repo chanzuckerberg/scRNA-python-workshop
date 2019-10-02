@@ -8,7 +8,7 @@ The workshop consists of explanatory discussions interspersed with hands-on exer
 
 ### 1. Install Python via Anaconda
 
-Even if you have previously installed Python, please install [Anaconda](https://docs.anaconda.com/anaconda/install/) for **Python version 3** (available on OSX, Linux, and Windows).
+Even if you have previously installed Python, please install [Anaconda](https://docs.anaconda.com/anaconda/install/) for **Python version 3** (available on OSX, Linux, and Windows). You can simply click through the install wizard (no customization required, all the defaults are fine).
 
 Anaconda is _package manager_, which means that it helps coordinate your Python installation and related _packages_ (useful code written by other people for performing specific tasks) for you so that you have a consistent _environment_ (the version of Python and the version of the code in each package that your computer looks at when doing your analysis).
 
@@ -31,7 +31,7 @@ Not everyone who uses Anaconda is a biologist. As a result, some biology-specifi
 
 To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
 
-1. Download the configuration file called [`sfn-workshop.yaml` here](https://github.com/chanzuckerberg/scRNA-python-workshop/raw/master/sfn-workshop.yaml). Save it an a spot you'll remember.
+1. Download the configuration file called [`sfn-workshop.yaml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1XB3efYh8klf_FZgVd9M_6MZ87LvhO_d9/view?usp=sharing). Save it an a spot you'll remember.
 2. Open Anaconda Navigator
 3. Click on `Environments` in the left sidebar
 4. Click on `Import` in the bottom left
