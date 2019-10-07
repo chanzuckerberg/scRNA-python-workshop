@@ -31,7 +31,7 @@ Not everyone who uses Anaconda is a biologist. As a result, some biology-specifi
 
 To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
 
-1. Download the configuration file called [`sfn-workshop.yaml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1XB3efYh8klf_FZgVd9M_6MZ87LvhO_d9/view?usp=sharing). Save it an a spot you'll remember.
+1. Download the configuration file called [`sfn-workshop.yaml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1UdDiD2WYBfyJnO2CDUIRhpzpHPrqZHve/view?usp=sharing). Save it an a spot you'll remember.
 2. Open Anaconda Navigator
 3. Click on `Environments` in the left sidebar
 4. Click on `Import` in the bottom left
