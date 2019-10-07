@@ -28,7 +28,7 @@ We have tried to incorporate current best practices and build intuition around m
 
 ## Prerequisites & resources
 
-The workshop consists of explanatory discussions interspersed with hands-on exercises. **We strongly encourage you to bring a laptop with all required packages installed in order to fully participate.** Please follow the instructions [here](setup.md)
+The workshop consists of explanatory discussions interspersed with hands-on exercises. **We strongly encourage you to bring a laptop with all required packages installed in order to fully participate.** Please follow the instructions [here](https://chanzuckerberg.github.io/scRNA-python-workshop/intro/setup.html)
 
 The course is intended for those who have basic familiarity with Python (e.g., at the level covered in a software carpentry workshop). Basic familiarity with the Jupyter notebooks and the command line is helpful but not required.
 
