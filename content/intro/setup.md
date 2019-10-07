@@ -72,15 +72,11 @@ If you are comfortable cloning a repository with git, we encourage you to do so.
 
 ### Bonus: install fun visualization tools (optional)
 
-1. Open Anaconda Navigator
-2. Click on `Environments` in the left sidebar
-3. Select the `sfn-workshop` environment from the list
-4. Click on the green `play` button that appears
-5. Select `Open Terminal` _(it's not scary, we promise! :)_
+1. Open a terminal window (Mac: Applications > Utilities > Terminal; Windows: Start > Windows System > Command Prompt)
 
 #### For the imaging track:
 
-6. In the terminal window that opens, copy and paste the following and press `Enter`:
+2. In the terminal window, copy and paste the following and press `Enter`:
 
    `python3 -m pip install napari`
 
@@ -88,7 +84,7 @@ To test your installation of napari, type `napari` in the next terminal line and
 
 #### For the single-cell analysis track:
 
-6. In the terminal window that opens, copy and paste the following and press `Enter`:
+2. In the terminal window, copy and paste the following and press `Enter`:
 
    `python3 -m pip install cellxgene`
 
