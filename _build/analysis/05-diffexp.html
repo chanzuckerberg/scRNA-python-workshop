@@ -9,7 +9,7 @@ prev_page:
   title: |-
     Clustering
 next_page:
-  url: /analysis/06-exploratory.html
+  url: /exploration/06-exploratory.html
   title: |-
     Exploration with cellxgene
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
@@ -234,7 +234,7 @@ Notably, although many cells in this cluster express the marker gene, there are 
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h2><p>Choose two subsets of the data (remember to use the raw values!). Plot the distribution of your favorite gene, and run the same t-test. Are the results as-expected?</p>
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Choose two subsets of the data (remember to use the raw values!). Plot the distribution of your favorite gene, and run the same t-test. Are the results as-expected?</p>
 <p><details><summary><h3>Hints</h3></summary>
 1 - To remind yourself of the available metadata, run <code>print(adata)</code>  <br>
 2 - To subset the raw values based on metadata, use the following pattern:<br><br>
@@ -280,12 +280,19 @@ Notably, although many cells in this cluster express the marker gene, there are 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: overflow encountered in expm1
+<pre>/Users/sidneybell/Library/Python/3.7/lib/python/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: overflow encountered in expm1
   foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
-/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: invalid value encountered in expm1
+/Users/sidneybell/Library/Python/3.7/lib/python/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: invalid value encountered in true_divide
   foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
-/usr/local/anaconda3/envs/sfn-workshop/lib/python3.7/site-packages/scanpy/tools/_rank_genes_groups.py:208: RuntimeWarning: invalid value encountered in true_divide
-  foldchanges = (np.expm1(mean_group) + 1e-9) / (np.expm1(mean_rest) + 1e-9)  # add small value to remove 0&#39;s
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>WARNING: dendrogram data not found (using key=dendrogram_cell_ontology_class). Running `sc.tl.dendrogram` with default parameters. For fine tuning it is recommended to run `sc.tl.dendrogram` independently.
 </pre>
 </div>
 </div>
@@ -296,7 +303,7 @@ Notably, although many cells in this cluster express the marker gene, there are 
 
 
 <div class="output_png output_subarea ">
-<img src="../images/analysis/05-diffexp_11_1.png"
+<img src="../images/analysis/05-diffexp_11_2.png"
 >
 </div>
 
@@ -312,11 +319,95 @@ Notably, although many cells in this cluster express the marker gene, there are 
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h2><p>Repeat this process for the <code>louvain</code> cluster assignments. How closely do these overlap? Does this jive with the results from our Rand Index assessment of cluster labels?</p>
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Repeat this process for the <code>louvain</code> cluster assignments. How closely do these overlap? Does this jive with the results from our Rand Index assessment of cluster labels?</p>
 <p><details><summary><h3>Solution</h3></summary>
 <code>sc.tl.rank_genes_groups(adata, groupby='louvain', use_raw=True, 
                         method='t-test_overestim_var', n_genes=10) # compute differential expression
 sc.pl.rank_genes_groups_tracksplot(adata, groupby='louvain') # plot the result</code></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Comparing-to-&quot;known&quot;-marker-genes">Comparing to "known" marker genes<a class="anchor-link" href="#Comparing-to-&quot;known&quot;-marker-genes"> </a></h2><p>We can also compare these data-driven marker genes to those considered by the field to be classic indicators of cell type.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">marker_genes</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s1">&#39;astrocyte&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Aldh1l1&#39;</span><span class="p">,</span> <span class="s1">&#39;Slc1a3&#39;</span><span class="p">,</span> <span class="s1">&#39;Aqp4&#39;</span><span class="p">],</span> 
+<span class="s1">&#39;oligodendrocyte&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Mog&#39;</span><span class="p">,</span><span class="s1">&#39;Mag&#39;</span><span class="p">],</span>
+<span class="s1">&#39;oligodendrocyte precursor cell&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pdgfra&#39;</span><span class="p">,</span><span class="s1">&#39;Susd5&#39;</span><span class="p">,</span><span class="s1">&#39;Cspg4&#39;</span><span class="p">],</span>
+<span class="s1">&#39;endothelial cell&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pecam1&#39;</span><span class="p">,</span><span class="s1">&#39;Cldn5&#39;</span><span class="p">,</span><span class="s1">&#39;Slco1c1&#39;</span><span class="p">,</span><span class="s1">&#39;Ocln&#39;</span><span class="p">],</span>
+<span class="s1">&#39;Bergmann glial cell&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gdf10&#39;</span><span class="p">,</span><span class="s1">&#39;Vim&#39;</span><span class="p">,</span><span class="s1">&#39;Nbl1&#39;</span><span class="p">,</span><span class="s1">&#39;A2m&#39;</span><span class="p">],</span>
+<span class="s1">&#39;excitatory neuron&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Slc17a7&#39;</span><span class="p">,</span><span class="s1">&#39;Neurod6&#39;</span><span class="p">,</span><span class="s1">&#39;Mab21l1&#39;</span><span class="p">],</span>
+<span class="s1">&#39;inhibitory neuron&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gad1&#39;</span><span class="p">,</span><span class="s1">&#39;Reln&#39;</span><span class="p">,</span><span class="s1">&#39;Calb1&#39;</span><span class="p">],</span>
+<span class="s1">&#39;brain pericyte&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Des&#39;</span><span class="p">,</span><span class="s1">&#39;Mcam&#39;</span><span class="p">,</span><span class="s1">&#39;Pdgfrb&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">matrixplot</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">marker_genes</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="s1">&#39;louvain&#39;</span><span class="p">,</span> <span class="n">use_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/analysis/05-diffexp_14_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>GridSpec(2, 3, height_ratios=[0.5, 10], width_ratios=[8.0, 0, 0.2])</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Think - pair - share</p>
+<ol>
+<li>Try recreating this plot using the raw values. What do you make of the results?  </li>
+<li>If you didn't have pre-annotated cell types, how would you use these results to preliminarily assign cells to cell types? What would your next step be?  </li>
+<li>Try recreating this plot to inspect how these marker genes overlap with the pre-annotated cell types in <code>cell_ontology_class</code>. Do you agree with these labels?  </li>
+</ol>
 
 </div>
 </div>
