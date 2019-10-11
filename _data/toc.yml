@@ -27,12 +27,6 @@
 - divider: true
 - header: Exploratory analysis & advanced exercises
 - title: Exploration with cellxgene
-  url: analysis/06-exploratory
-# - title: Advanced exercises
-# url:
-# - title: Exploration with cellxgene
-# url:
-# - title: Advanced exercises
-#   url: /exploration/advanced
-# - title: Exploration with cellxgene
-#   url: /exploration/cellxgene
+  url: exploration/06-exploratory
+- title: Advanced exercises
+  url: exploration/07-exercise

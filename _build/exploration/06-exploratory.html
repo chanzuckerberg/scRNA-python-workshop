@@ -1,0 +1,53 @@
+---
+interact_link: content/exploration/06-exploratory.md
+kernel_name: 
+has_widgets: false
+title: |-
+  Exploration with cellxgene
+prev_page:
+  url: /analysis/05-diffexp.html
+  title: |-
+    Differential expression
+next_page:
+  url: /exploration/07-exercise.html
+  title: |-
+    Advanced exercises
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Exploratory-analysis-with-cellxgene">Exploratory analysis with cellxgene<a class="anchor-link" href="#Exploratory-analysis-with-cellxgene"> </a></h1><h2 id="Introduction-to-cellxgene">Introduction to cellxgene<a class="anchor-link" href="#Introduction-to-cellxgene"> </a></h2><p>Cellxgene (pronounced "cell-by-gene") is an interactive data explorer for single-cell transcriptomics datasets. You can see a working example <a href="https://www.kidneycellatlas.org/fetal-kidney-immune.">here</a></p>
+<p>As input, it takes an <code>h5ad</code> file (AnnData) that contains a pre-computed low-dimensional embedding (e.g., tSNE or UMAP) and, optionally, additional metadata (e.g., annotated tissue types or precomputed cluster labels).</p>
+<p>Let's load the brain data we've been working with into cellxgene, and then spend some time exploring the dataset in a bit more detail.</p>
+<h2 id="Launching-cellxgene">Launching cellxgene<a class="anchor-link" href="#Launching-cellxgene"> </a></h2><ol>
+<li>If you haven't done so already, follow the instructions at the bottom of <a href="https://chanzuckerberg.github.io/scRNA-python-workshop/intro/setup.html">this page</a> to install cellxgene and verify your installation</li>
+<li>Open a terminal window (Mac: <code>Applications &gt; Utilities &gt; Console</code>; Windows: <code>Start &gt; All Programs &gt; Accessories &gt; Command Prompt</code></li>
+<li>In the terminal, type <code>cellxgene launch path/to/course/folder/content/data/brain_clusters.h5ad --open</code><br>
+You need to replace <code>path/to/course/folder</code> with the correct file path to where your course folder lives on your computer.<br>
+For example, for a mac user with the course folder on the desktop, I would enter <code>Desktop/scRNA-python-workshop/content/data/brain_clusters.h5ad</code></li>
+</ol>
+<h2 id="Exercises:-exploring-your-data">Exercises: exploring your data<a class="anchor-link" href="#Exercises:-exploring-your-data"> </a></h2><p>Cellxgene can be used for many different exploratory tasks; here are a few examples to get you started.</p>
+<h3 id="Looking-for-confounders">Looking for confounders<a class="anchor-link" href="#Looking-for-confounders"> </a></h3><p>Try coloring by the <code>mouse.id</code>; does it look like the structure in the embedded data is determined by which mouse a cell came from, or are they intermingled? What does that tell you?<br>
+Try this for each other possible confounder in the metadata. What do you observe?</p>
+<h3 id="QC-cluster-assignments">QC cluster assignments<a class="anchor-link" href="#QC-cluster-assignments"> </a></h3><p>Color by <code>mouse.sex</code> and expand <code>louvain</code> (cluster labels). Are the clusters we identified made up of all cells from one mouse, or are they intermingled? What does that tell you?</p>
+<h3 id="Visualizing-gene-expression">Visualizing gene expression<a class="anchor-link" href="#Visualizing-gene-expression"> </a></h3><p>Add your favorite gene and color by its expression. Because most genes are not expressed in most cells, you may need to use the <code>clip</code> function (menu in the top right) to see the distribution.
+Now look at its distribution across cell types (expand the <code>cell_ontology_class</code> metadata). Are there any interesting differences?</p>
+<h3 id="Compare-groups-of-cells">Compare groups of cells<a class="anchor-link" href="#Compare-groups-of-cells"> </a></h3><p>Select an interesting group of cells and assign it to <code>Set1</code>. Repeat for another group of cells and save them in <code>Set2</code>. Click <code>Compute differential expression</code>. What do you make of the returned differentially expressed genes? Are the p-values meaningful? What are some of the caveats for interpreting these p-values? How about the log-fold change?</p>
+<h3 id="Assign-cell-types">Assign cell types<a class="anchor-link" href="#Assign-cell-types"> </a></h3><p>Practice identifying a population of cells based on their marker genes, and save your observations by creating a <code>New label</code>.</p>
+<h2 id="Resources">Resources<a class="anchor-link" href="#Resources"> </a></h2><p>For more information about cellxgene, <a href="https://chanzuckerberg.github.io/cellxgene/">read the docs here</a>.</p>
+<p>To request a feature or report a bug, <a href="https://github.com/chanzuckerberg/cellxgene/issues">check out the github repo</a>.</p>
+<p>To chat with other users or contact the developers with questions, comments, or suggestions, <a href="https://join-cellxgene-users.herokuapp.com/">join the <code>#cellxgene-users</code> slack channel</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+</main>
