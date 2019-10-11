@@ -1,0 +1,228 @@
+---
+interact_link: content/exploration/07-exercise.ipynb
+kernel_name: python3
+has_widgets: false
+title: |-
+  Advanced exercises
+prev_page:
+  url: /exploration/06-exploratory.html
+  title: |-
+    Exploration with cellxgene
+next_page:
+  url: 
+  title: |-
+    
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+<main class="jupyter-page">
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h1><p><em>This exercise was adapted from the</em> <a href="https://github.com/AlexsLemonade/training-modules/blob/master/scRNA-seq/04-scrnaseq_exercise.Rmd"><em>Alex's Lemonade Stand training module</em></a> <em>under a Creative Commons Attribution license</em>.</p>
+<p>Our objective for this exercise is to investigate the expression of marker genes across cell types.
+Here we consider <em>marker genes</em> to be genes considered by the field to be classic indicators of cell type.</p>
+<p>These <em>marker genes</em> are the ones often used for FAC sorting, which is what was done in <a href="https://www.ncbi.nlm.nih.gov/pubmed/29091775">Darmanis et al. <em>Cell Reports.</em> 2017.</a>.</p>
+<p>Here's a figure from their paper to give you a very brief overview of their 
+FAC sorting methodology.</p>
+<p><img src="figures/glioblastoma_facs.jpg" width=500></p>
+<p>For more details on the methods, <a href="https://www.ncbi.nlm.nih.gov/pubmed/29091775">see their manuscript.</a>
+But, in short, this study splits cells from a glioblastoma tumor by their cell-type based on their FAC sorting.</p>
+<p>The authors identified neoplastic cells using multiple analyses, including a high level of <em>SOX9</em> expression. The neoplastic cells make up the vast majority of the tumor core. So by seeing what marker genes they express, we may get an initial, gene-by-gene idea of how these cells behave.</p>
+<p>The end result of this exercise will be a heatmap to compare the mean expression of the marker genes by cell type. We will also visualize the marker gene expression in reduced dimensions by creating a principal components scatterplot that color codes each cell by the expression level of a marker gene.</p>
+<p>The <strong>preprocessing exercise</strong> includes filtering and normalizing the raw expression matrix; the <strong>analysis exercise</strong> starts from a pre-processed expression matrix. You can do either or both of these exercises.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Preprocessing-exercise">Preprocessing exercise<a class="anchor-link" href="#Preprocessing-exercise"> </a></h1><h2 id="Load-raw-expression-matrix">Load raw expression matrix<a class="anchor-link" href="#Load-raw-expression-matrix"> </a></h2><p>Download the h5ad file containing the raw expression matrix <a href="insert link">here</a>.<br>
+Save this file in <code>scRNA-python-workshop/content/data/glioblastoma.h5ad</code>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;./data/glioblastoma_raw.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Task:-quality-control">Task: quality control<a class="anchor-link" href="#Task:-quality-control"> </a></h2><p>Practice filtering based on quality control metrics. You can refer back to the <a href="https://chanzuckerberg.github.io/scRNA-python-workshop/preprocessing/01-basic-qc.html">Quality control</a> notebook for useful code snippets.</p>
+<p>Your workflow should consist of:</p>
+<ol>
+<li>Calculate quality control metrics  </li>
+<li>Plot the distribution of metrics of interest and determine reasonable thresholds. Do you think the same cutoff values (that we used for the Tabula Muris data) are appropriate for this dataset? Why or why not?  </li>
+<li>Filter out cells and genes using these values. How many cells were removed? How many genes?</li>
+</ol>
+<p>Compare your results to your neighbor's, and discuss why you made the choices you did.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Task:-normalization">Task: normalization<a class="anchor-link" href="#Task:-normalization"> </a></h2><p>Practice normalizing this dataset. You can refer back to the <a href="https://chanzuckerberg.github.io/scRNA-python-workshop/preprocessing/02-normalization.html">Normalization</a> notebook for useful code snippets.</p>
+<p>Your workflow should consist of:</p>
+<ol>
+<li>Using PCA to get a visual overview of the data and potential confounders (e.g., <code>adata.obs['plate_id']</code>)</li>
+<li>Adjusting for library size  </li>
+<li>Normalizing gene expression  </li>
+<li>Using PCA to understand how normalization is effecting the data  </li>
+</ol>
+<p>Compare your results to your neighbor's, and discuss why you made the choices you did.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Analysis-exercise">Analysis exercise<a class="anchor-link" href="#Analysis-exercise"> </a></h1><h2 id="Load-data">Load data<a class="anchor-link" href="#Load-data"> </a></h2><p>If you did not do the preprocessing exercise above, you can start from this preprocessed data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;./data/glioblastoma_normalized.h5ad&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Task:-extract-marker-genes">Task: extract marker genes<a class="anchor-link" href="#Task:-extract-marker-genes"> </a></h2><p>For this exercise, we want to analyze specific genes and their expression among 
+the cell types in our dataset. We have already added <em>SOX9</em> and <em>CD45</em> as marker genes to investigate as 
+controls, due to their use in the methods for FAC sorting. <em>MOG</em> has been added as a different type of control: a gene that wasn't used for FACS, but is related to myelination, and thus the oligodendrocyte phenotype.</p>
+<p>Add other genes you are interested in to the gene list we started for you below. 
+You can use  <a href="https://www.genecards.org/.">GeneCard</a> to get information about 
+your chosen gene. Then add your chosen gene to this data.frame in the same format we have started 
+for you by replacing our <code>&lt;FILL_IN_THE_BLANKS&gt;</code>.</p>
+<p>Note: Here, you'll need to use Ensembl IDs. There are ways to convert these to other forms of gene IDs in a bulk fashion, but for this exercise, we will only need a few genes and we've already set some up for you.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Make a dictionary that contains gene symbols and their associated Ensembl IDs</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Sox9&#39;</span><span class="p">:</span> <span class="s1">&#39;ENSG00000125398&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Cd45&#39;</span><span class="p">:</span> <span class="s1">&#39;ENSG00000081237&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Mog&#39;</span><span class="p">:</span> <span class="s1">&#39;ENSG00000204655&#39;</span><span class="p">,</span>
+<span class="c1">#            &#39;REPLACE_GENE_SYMBOL&#39;: &#39;REPLACE_ENSEMBL_GENE_ID&#39;</span>
+          <span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Depending on the gene you chose, it may not be in our filtered matrix, so you 
+may need to try a few. 
+You can use an <code>in</code> operator to check if the gene you are looking for is in 
+our filtered gene matrix (Remember it has to be an Ensembl gene ID e.g.<code>ENSG...</code>,
+and it needs to be in quotes).</p>
+<p>Use the phrase below to find out if a gene you are interested in is in the filtered dataset:</p>
+<p><code>print('ENSG00000125398' in adata.var.index)</code></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Task:-investigate-how-the-mean-expression-of-marker-genes-compares-across-cell-types">Task: investigate how the mean expression of marker genes compares across cell types<a class="anchor-link" href="#Task:-investigate-how-the-mean-expression-of-marker-genes-compares-across-cell-types"> </a></h2><p>Use <code>sc.pl.heatmap()</code> to visualize how these marker genes vary across cell types.</p>
+<p>What do you think? Do the results make sense?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Task:-How-does-marker-gene-expression-relate-to-principal-components-analysis-scores-across-different-cell-types?">Task: How does marker gene expression relate to principal components analysis scores across different cell types?<a class="anchor-link" href="#Task:-How-does-marker-gene-expression-relate-to-principal-components-analysis-scores-across-different-cell-types?"> </a></h2><p>Another way to examine the relationship of marker genes and cell types is to 
+make a PCA plot, like we did previously, but color the scatterplot points 
+according to one of the marker gene's expression.</p>
+<p>Perform PCA on the normalized dataset using <code>sc.tl.pca()</code>.</p>
+<p>Use <code>sc.pl.pca_scatter()</code> to make a scatterplot of the PCA results, coloring cells
+by the expression of a marker gene, of your choosing.</p>
+<p>After you have successfully made this plot, repeat this for 
+the other genes in your marker list. 
+Make more code chunks as you need them.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+</main>
