@@ -26,7 +26,7 @@ Here we consider <em>marker genes</em> to be genes considered by the field to be
 <p>These <em>marker genes</em> are the ones often used for FAC sorting, which is what was done in <a href="https://www.ncbi.nlm.nih.gov/pubmed/29091775">Darmanis et al. <em>Cell Reports.</em> 2017.</a>.</p>
 <p>Here's a figure from their paper to give you a very brief overview of their 
 FAC sorting methodology.</p>
-<p><img src="figures/glioblastoma_facs.jpg" width=500></p>
+<p><img src="../figures/glioblastoma_facs.jpg" width=500></p>
 <p>For more details on the methods, <a href="https://www.ncbi.nlm.nih.gov/pubmed/29091775">see their manuscript.</a>
 But, in short, this study splits cells from a glioblastoma tumor by their cell-type based on their FAC sorting.</p>
 <p>The authors identified neoplastic cells using multiple analyses, including a high level of <em>SOX9</em> expression. The neoplastic cells make up the vast majority of the tumor core. So by seeing what marker genes they express, we may get an initial, gene-by-gene idea of how these cells behave.</p>
@@ -59,7 +59,7 @@ Save this file in <code>scRNA-python-workshop/content/data/glioblastoma.h5ad</co
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 
-<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;./data/glioblastoma_raw.h5ad&#39;</span><span class="p">)</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/glioblastoma_raw.h5ad&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -124,7 +124,7 @@ Save this file in <code>scRNA-python-workshop/content/data/glioblastoma.h5ad</co
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;./data/glioblastoma_normalized.h5ad&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../data/glioblastoma_normalized.h5ad&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
