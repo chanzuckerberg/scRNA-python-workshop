@@ -177,6 +177,28 @@ assigned and each cell is assigned to its nearest cluster:</p>
 
 <div class="jb_cell">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span> <span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">umap_coordinates</span><span class="p">)</span> <span class="c1"># fix the random state for reproducibility</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;kmeans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span> <span class="c1"># retrieve the labels and add them as a metadata column in our AnnData object</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;kmeans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;kmeans&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">umap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;kmeans&#39;</span><span class="p">)</span> <span class="c1"># plot the results</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Graph-based-methods">Graph-based methods<a class="anchor-link" href="#Graph-based-methods"> </a></h2><p>Graph-based methods attempt to partition a pre-computed <strong>neighhbor graph</strong> into modules (i.e., groups / clusters of cells) based on their connectivity. Currently, the most widely used graph-based methods for single cell data are variants of the <strong>louvain</strong> algorithm. The intuition behind the louvain algorithm is that it looks for areas of the neighbor graph that are more densely connected than expected (based on the overall connectivity in the graph).</p>
@@ -194,13 +216,13 @@ assigned and each cell is assigned to its nearest cluster:</p>
 <h2 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h2><ol>
 <li><p>Use the scanpy function <code>sc.tl.louvain</code> to compute the graph-based cluster labels for our dataset. Visualize your results on the UMAP plot. What is the Rand index compared to the ground-truth cell types?</p>
 </li>
-<li><p>Repeat this with several different values for the <code>resoltion</code> parameter. How does this effect your results?</p>
+<li><p>Repeat this with several different values for the <code>resolution</code> parameter. How does this effect your results?</p>
 </li>
 </ol>
 <p>
 <details>
 <summary><h3>Solution</h3></summary>
-<code>sc.tl.louvain(adata)
+<code style=display:block;white-space:pre-wrap>sc.tl.louvain(adata)
 sc.pl.umap(adata, color='louvain')
 rand_index = adjusted_rand_score(adata.obs['cell_ontology_class'], adata.obs['louvain'])
 print('The rand index is ', round(rand_index, 2))</code>
@@ -210,6 +232,25 @@ The low rand index with the default resolution parameter is quite low (0.34), bu
 </p>
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">louvain</span><span class="p">)</span>
+<span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">umap</span><span class="p">)</span>
+<span class="n">help</span><span class="p">(</span><span class="n">adjusted_rand_score</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -232,13 +273,48 @@ The low rand index with the default resolution parameter is quite low (0.34), bu
 
 <div class="jb_cell">
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Advanced-exercise">Advanced exercise<a class="anchor-link" href="#Advanced-exercise"> </a></h2><p>So far, we've explored how the choice of resolution parameter influences the results we get from clustering. However, these clustering algorithms are also downstream dependents on the results of umap (k-means and louvain) and the neighbor graph (louvain). These methods also have parameter choices that can influence our results.</p>
-<p>Try recalculating <code>sc.tl.umap</code> and <code>sc.pp.neighbors</code> under different parameter values (remember that you can use <code>help(function)</code> to see the documentation of each argument the function accepts). Then recalculate clusters with your favorite method. How much did this change the results?</p>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">adjusted_rand_score</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 </div>
 </div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Advanced-exercise">Advanced exercise<a class="anchor-link" href="#Advanced-exercise"> </a></h2><p>So far, we've explored how the choice of resolution parameter influences the results we get from clustering. However, these clustering algorithms are also downstream dependents on the results of umap (k-means and louvain) and the neighbor graph (louvain). These methods also have parameter choices that can influence our results.</p>
+<p>Try recalculating <code>sc.tl.umap</code> and <code>sc.pp.neighbors</code> under different parameter values. Then recalculate clusters with your favorite method. How much did this change the results?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">)</span>
+<span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">umap</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 

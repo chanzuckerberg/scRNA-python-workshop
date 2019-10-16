@@ -90,7 +90,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">astrocyte_marker</span> <span class="o">=</span> <span class="s1">&#39;Gja1&#39;</span> <span class="c1"># define genes of interest</span>
-<span class="n">housekeeping</span> <span class="o">=</span> <span class="s1">&#39;Chmp2a&#39;</span> 
+<span class="c1"># housekeeping = &#39;Chmp2a&#39; </span>
 
 <span class="n">cluster2</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span><span class="p">]</span> <span class="c1"># Use a mask to subset dataset to cells assigned to cluster 2</span>
 <span class="n">not_cluster2</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;2&#39;</span><span class="p">]</span> <span class="c1"># All other cells</span>
@@ -218,13 +218,24 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 2 - What is one piece of information you would like to know, but that the p-value doesn't tell you?<br>
 3 - Based on these results, do you think this cluster represents astrocytes? Why or why not?</p>
 <details><summary><h3>Solution</h3></summary>  
-1 - This result tells you that we would be very surprised if these two populations had no true difference in mean expression, given the observed sample.<br><br>
+1 - This result tells you that we would be very surprised if these two populations had no true difference in mean expression, given the observed sample.<p/>
 2 - A t-test compares our data to the null hypothesis that the means of two distributions are **equal**. This accounts for the mean, standard deviation, and sample size of the two distributions. However, a p-value alone does not tell us anything about the *magnitude* of that difference: with large N, even very small (and biologically meaningless) differences in expression values can still return very "statistically significant" p-values. <br><br>  
 3 - This has several tricky questions embedded in it:  <br>
 * What constitutes a cell type? With what granularity? (E.g., lymphocytes > T cells > CD4+ T cells)  <br>
 * How does cell state interact with cell type? (E.g., when annotating in/activated T cells)  <br>
 Notably, although many cells in this cluster express the marker gene, there are many that don't. We should be careful before assuming that a cluster == a cell type!
 </details>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>...notes...</p>
+
 </div>
 </div>
 </div>
@@ -243,6 +254,29 @@ Notably, although many cells in this cluster express the marker gene, there are 
 
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">variable1</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">==</span> <span class="n">value1</span> <span class="p">]</span>
+<span class="n">variable2</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">==</span> <span class="n">value2</span> <span class="p">]</span>
+
+<span class="n">ttest</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">variable1</span><span class="p">,</span> 
+          <span class="n">variable2</span><span class="p">,</span> 
+          <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># it&#39;s not necessarily fair to assume that these two populations have equal variance</span>
+          <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span> <span class="c1"># omit NaN values</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -303,7 +337,7 @@ Notably, although many cells in this cluster express the marker gene, there are 
 
 
 <div class="output_png output_subarea ">
-<img src="../images/analysis/05-diffexp_11_2.png"
+<img src="../images/analysis/05-diffexp_13_2.png"
 >
 </div>
 
@@ -321,7 +355,7 @@ Notably, although many cells in this cluster express the marker gene, there are 
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Repeat this process for the <code>louvain</code> cluster assignments. How closely do these overlap? Does this jive with the results from our Rand Index assessment of cluster labels?</p>
 <p><details><summary><h3>Solution</h3></summary>
-<code>sc.tl.rank_genes_groups(adata, groupby='louvain', use_raw=True, 
+<code style=display:block;white-space:pre-wrap>sc.tl.rank_genes_groups(adata, groupby='louvain', use_raw=True, 
                         method='t-test_overestim_var', n_genes=10) # compute differential expression
 sc.pl.rank_genes_groups_tracksplot(adata, groupby='louvain') # plot the result</code></p>
 
@@ -375,7 +409,7 @@ sc.pl.rank_genes_groups_tracksplot(adata, groupby='louvain') # plot the result</
 
 
 <div class="output_png output_subarea ">
-<img src="../images/analysis/05-diffexp_14_0.png"
+<img src="../images/analysis/05-diffexp_16_0.png"
 >
 </div>
 
@@ -411,6 +445,23 @@ sc.pl.rank_genes_groups_tracksplot(adata, groupby='louvain') # plot the result</
 
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">matrixplot</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 

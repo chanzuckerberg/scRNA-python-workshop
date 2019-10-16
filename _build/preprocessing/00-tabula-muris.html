@@ -62,8 +62,8 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="n">count_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/brain_counts.csv&#39;</span><span class="p">,</span> <span class="c1"># where to find the data</span>
                               <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># use the first column to label the rows (the &#39;index&#39;)</span>
 
-<span class="c1">## print the first 5 rows of our dataframe</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">count_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">())</span> 
+<span class="c1">## print the first 2 rows of our dataframe</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> 
 </pre></div>
 
     </div>
@@ -77,42 +77,27 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>                         0610005C13Rik  0610007C21Rik  0610007L01Rik  \
-A1.B003290.3_38_F.1.1                0            125             16   
-A1.B003728.3_56_F.1.1                0              0              0   
-A1.MAA000560.3_10_M.1.1              0            348              0   
-A1.MAA000564.3_10_M.1.1              0             41             36   
-A1.MAA000923.3_9_M.1.1               0             53              0   
+<pre>                       0610005C13Rik  0610007C21Rik  0610007L01Rik  \
+A1.B003290.3_38_F.1.1              0            125             16   
+A1.B003728.3_56_F.1.1              0              0              0   
 
-                         0610007N19Rik  0610007P08Rik  0610007P14Rik  \
-A1.B003290.3_38_F.1.1                0              0              0   
-A1.B003728.3_56_F.1.1                0              0            324   
-A1.MAA000560.3_10_M.1.1              0              0              5   
-A1.MAA000564.3_10_M.1.1              0              0             24   
-A1.MAA000923.3_9_M.1.1               0              0              0   
+                       0610007N19Rik  0610007P08Rik  0610007P14Rik  \
+A1.B003290.3_38_F.1.1              0              0              0   
+A1.B003728.3_56_F.1.1              0              0            324   
 
-                         0610007P22Rik  0610008F07Rik  0610009B14Rik  \
-A1.B003290.3_38_F.1.1                0              0              0   
-A1.B003728.3_56_F.1.1                0              0              0   
-A1.MAA000560.3_10_M.1.1              0              0              0   
-A1.MAA000564.3_10_M.1.1              0              0              0   
-A1.MAA000923.3_9_M.1.1               0              0              0   
+                       0610007P22Rik  0610008F07Rik  0610009B14Rik  \
+A1.B003290.3_38_F.1.1              0              0              0   
+A1.B003728.3_56_F.1.1              0              0              0   
 
-                         0610009B22Rik  ...  Zxdb  Zxdc  Zyg11a  Zyg11b  Zyx  \
-A1.B003290.3_38_F.1.1                0  ...     0     0       0       0    0   
-A1.B003728.3_56_F.1.1                0  ...     0     0       0       0    0   
-A1.MAA000560.3_10_M.1.1              0  ...     0     0       0       0    0   
-A1.MAA000564.3_10_M.1.1             14  ...     0     0       0       0  125   
-A1.MAA000923.3_9_M.1.1               0  ...     0     0       0      81    0   
+                       0610009B22Rik  ...  Zxdb  Zxdc  Zyg11a  Zyg11b  Zyx  \
+A1.B003290.3_38_F.1.1              0  ...     0     0       0       0    0   
+A1.B003728.3_56_F.1.1              0  ...     0     0       0       0    0   
 
-                         Zzef1  Zzz3  a  l7Rn6  zsGreen_transgene  
-A1.B003290.3_38_F.1.1        0     0  0     54                  0  
-A1.B003728.3_56_F.1.1        0     0  0      0                  0  
-A1.MAA000560.3_10_M.1.1    195     0  0    113                  0  
-A1.MAA000564.3_10_M.1.1      0     1  0      0                  0  
-A1.MAA000923.3_9_M.1.1       0     0  0      0                  0  
+                       Zzef1  Zzz3  a  l7Rn6  zsGreen_transgene  
+A1.B003290.3_38_F.1.1      0     0  0     54                  0  
+A1.B003728.3_56_F.1.1      0     0  0      0                  0  
 
-[5 rows x 23433 columns]
+[2 rows x 23433 columns]
 </pre>
 </div>
 </div>
@@ -150,6 +135,23 @@ which represents <code>(N rows, N columns)</code>.
 
 <div class="jb_cell">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Reading-the-metadata">Reading the metadata<a class="anchor-link" href="#Reading-the-metadata"> </a></h2><p>The authors have also provided metadata describing each cell. This metadata is stored in a separate file, <code>brain_metadata.csv</code>. We can load it into a dataframe and inspect it, just like we did for the count data.</p>
@@ -158,19 +160,19 @@ which represents <code>(N rows, N columns)</code>.
 <details>
 <summary><h3>Solution</h3></summary>
 First, we need to load in the metadata.<br>
-<code>metadata_dataframe = pd.read_csv('../data/brain_metadata.csv', # where to find the data
+<code style=display:block;white-space:pre-wrap>metadata_dataframe = pd.read_csv('../data/brain_metadata.csv', # where to find the data
                            index_col=0) # use the first column as the index</code>
 
 <p>
 Let's take a peak at the resulting dataframe to make sure it looks correct. <br>
-<code>print(metadata_dataframe.shape)</code><br>
-<code>>>> (3401, 5)</code><br>
+<code style=display:block;white-space:pre-wrap>print(metadata_dataframe.shape)
+>>> (3401, 5)</code><br>
 We have 5 columns of information about 3,401 cells. Sounds reasonable.
 
 </p><p>
-Let's take a closer look and inspect the first few rows:<br>
+Let's take a closer look and inspect the first few rows:<p/>
 <code>print(metadata_dataframe.head())</code><br>
-<code>>>>                        cell_ontology_class    subtissue mouse.sex mouse.id  \
+<code style=display:block;white-space:pre-wrap>>>>                        cell_ontology_class    subtissue mouse.sex mouse.id  \
 cell                                                                          
 A1.B003290.3_38_F.1.1             astrocyte     Striatum         F   3_38_F   
 A1.B003728.3_56_F.1.1             astrocyte     Striatum         F   3_56_F   
@@ -194,6 +196,23 @@ A1.MAA000923.3_9_M.1.1      MAA000923</code>
 
 <div class="jb_cell">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">metadata_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>To get a sense for what is in this dataset, let's look at the summary of each metadata column.</p>
@@ -207,8 +226,8 @@ _Hint: you can access all the column names in the dataframe with <code>columns =
 <details>
 <summary><h3>Solution</h3></summary>
 1. We can count the number of times each value appears in a column like this:<br>
-    <code>print(pd.value_counts(metadata_dataframe['subtissue']))</code><br>
-    <code>>>>        
+    <code style=display:block;white-space:pre-wrap>print(pd.value_counts(metadata_dataframe['subtissue']))
+>>>>        
 Cortex         1149
 Hippocampus     976
 Striatum        723
@@ -216,7 +235,7 @@ Cerebellum      553
 Name: subtissue, dtype: int64</code>
     <p/>
 2. To repeat this for each column in the dataframe, we can use a <code>for</code> loop:<br>
-<code>for column in metadata_dataframe.columns.values:
+<code style=display:block;white-space:pre-wrap>for column in metadata_dataframe.columns.values:
     print(pd.value_counts(metadata_dataframe[column]))</code>
 </details>
     </p>
