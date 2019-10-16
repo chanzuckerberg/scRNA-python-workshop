@@ -112,12 +112,12 @@ To test your installation of napari, type `napari` in the next terminal line and
    `python3 -m pip install cellxgene`
 
 To test your installation of cellxgene, type `cellxgene` in the next terminal line and press `Enter`. You should see something like this:  
-<code>Usage: cellxgene [OPTIONS] COMMAND [ARGS]...
-Options:
---version Show the version and exit.
---help Show this message and exit.
-Commands:
-launch Launch the cellxgene data viewer.
+<code>Usage: cellxgene [OPTIONS] COMMAND [ARGS]...  
+Options:  
+--version Show the version and exit.  
+--help Show this message and exit.  
+Commands:  
+launch Launch the cellxgene data viewer.  
 prepare Preprocesses data for use with cellxgene.</code>
 
 ### **If this does not work, and you would like to try out the visualization tools in class, please come to office hours before class so we can help you.**

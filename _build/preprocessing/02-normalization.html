@@ -285,13 +285,12 @@ million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</st
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.normalize_total()</code> to normalize with counts per million, excluding highly expressed genes from the size factor calculation. 
-_Hint: start with the Parameters list in <code>help(sc.pp.normalize_total())</code></p>
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise"> </a></h3><p>Use the SCANPY function <code>sc.pp.normalize_total()</code> to normalize with counts per million, excluding highly expressed genes from the size factor calculation.</p>
 <p>Visualize the output with PCA. How much difference did this make? Which method do you prefer for this dataset?</p>
 <p>
 <details>
 <summary><h3>Solution</h3></summary>
-<code>adata_cpm_ex = adata.copy() # make a copy so we can compare results
+<code style=display:block;white-space:pre-wrap>adata_cpm_ex = adata.copy() # make a copy so we can compare results
 sc.pp.normalize_total(adata_cpm_ex, target_sum=1e6, exclude_highly_expressed=True) # normalize
 sc.pp.pca(adata_cpm_ex) # run pca
 sc.pl.pca_overview(adata_cpm_ex) # plot pca</code>
@@ -301,6 +300,23 @@ This is more reasonable than before: the second component now explains some of t
 </p>
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_total</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -371,7 +387,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_16_0.png"
+<img src="../images/preprocessing/02-normalization_17_0.png"
 >
 </div>
 
@@ -383,7 +399,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_16_1.png"
+<img src="../images/preprocessing/02-normalization_17_1.png"
 >
 </div>
 
@@ -395,7 +411,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_16_2.png"
+<img src="../images/preprocessing/02-normalization_17_2.png"
 >
 </div>
 
