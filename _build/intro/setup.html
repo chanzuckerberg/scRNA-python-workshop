@@ -24,27 +24,41 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <h2 id="Installation-guide-(before-class)">Installation guide (before class)<a class="anchor-link" href="#Installation-guide-(before-class)"> </a></h2><h3 id="1.-Install-Python-via-Anaconda">1. Install Python via Anaconda<a class="anchor-link" href="#1.-Install-Python-via-Anaconda"> </a></h3><p>Even if you have previously installed Python, please install <a href="https://docs.anaconda.com/anaconda/install/">Anaconda</a> for <strong>Python version 3</strong> (available on OSX, Linux, and Windows). You can simply click through the install wizard (no customization required, all the defaults are fine).</p>
 <p>Anaconda is <em>package manager</em>, which means that it helps coordinate your Python installation and related <em>packages</em> (useful code written by other people for performing specific tasks) for you so that you have a consistent <em>environment</em> (the version of Python and the version of the code in each package that your computer looks at when doing your analysis).</p>
 <p>You should now see an icon for "Anaconda Navigator" in your Applications folder (mac) or the Start menu (Windows). Please contact the instructors if you do not see this icon!</p>
-<h3 id="2.-Install-Bioconda">2. Install Bioconda<a class="anchor-link" href="#2.-Install-Bioconda"> </a></h3><p>Not everyone who uses Anaconda is a biologist. As a result, some biology-specific packages are only available in the Bioconda <em>channel</em> (collection of packages).</p>
-<ol>
+<h2 id="2.-Install-required-packages-(for-Mac-OS)">2. Install required packages (for <strong>Mac OS</strong>)<a class="anchor-link" href="#2.-Install-required-packages-(for-Mac-OS)"> </a></h2><h3 id="2A.-Install-Bioconda">2A. Install Bioconda<a class="anchor-link" href="#2A.-Install-Bioconda"> </a></h3><p>Not everyone who uses Anaconda is a biologist. As a result, some biology-specific packages are only available in the Bioconda <em>channel</em> (collection of packages).</p>
+<ul>
 <li>Open Anaconda Navigator.</li>
 <li>Click on <code>Environments</code> in the left sidebar</li>
 <li>Click on <code>Channels</code> in the top middle of the screen</li>
 <li>Click on <code>Add...</code></li>
 <li>In the bottom text box, type <code>bioconda</code> and press <code>Enter</code></li>
 <li>Press <code>Update channels</code></li>
-</ol>
+</ul>
 <p><img src="../figures/anaconda-channel.png" width=700></p>
-<h3 id="3.-Download-the-course-config-file">3. Download the course config file<a class="anchor-link" href="#3.-Download-the-course-config-file"> </a></h3><p>To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.</p>
-<ol>
-<li>Download the configuration file called <a href="https://drive.google.com/a/chanzuckerberg.com/file/d/1UdDiD2WYBfyJnO2CDUIRhpzpHPrqZHve/view?usp=sharing"><code>sfn-workshop.yaml</code> here</a>. Save it an a spot you'll remember.</li>
+<h3 id="2B.-Download-the-course-config-file">2B. Download the course config file<a class="anchor-link" href="#2B.-Download-the-course-config-file"> </a></h3><p>To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.</p>
+<ul>
+<li>Download the configuration file called <a href="https://drive.google.com/a/chanzuckerberg.com/file/d/1UdDiD2WYBfyJnO2CDUIRhpzpHPrqZHve/view?usp=sharing"><code>sfn-workshop-mac.yml</code> here</a>. Save it an a spot you'll remember.</li>
 <li>Open Anaconda Navigator</li>
 <li>Click on <code>Environments</code> in the left sidebar</li>
 <li>Click on <code>Import</code> in the bottom left</li>
-<li>Enter <code>sfn-workshop</code> as the Name, and browse for the <code>sfn-workshop.yaml</code> file you just downloaded</li>
+<li>Enter <code>sfn-workshop</code> as the Name, and browse for the <code>sfn-workshop-mac.yaml</code> file you just downloaded</li>
 <li>Press <code>Import</code></li>
-</ol>
+</ul>
 <p><img src="../figures/anaconda-env.png" width=700></p>
-<h3 id="4.-Check-your-installation">4. Check your installation<a class="anchor-link" href="#4.-Check-your-installation"> </a></h3><ol>
+<h2 id="2.-Install-required-packages-(for-windows)">2. Install required packages (for <strong>windows</strong>)<a class="anchor-link" href="#2.-Install-required-packages-(for-windows)"> </a></h2><h3 id="2A.-Download-the-course-config-file">2A. Download the course config file<a class="anchor-link" href="#2A.-Download-the-course-config-file"> </a></h3><p>To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.</p>
+<ul>
+<li>Download the configuration file called <a href="https://drive.google.com/a/chanzuckerberg.com/file/d/1GQGx3DnGRtrxpXAf-iFgREX75TnmbPMg/view?usp=sharing"><code>sfn-workshop-windows.yml</code> here</a>. Save it an a spot you'll remember.</li>
+<li>Open Anaconda Navigator</li>
+<li>Click on <code>Environments</code> in the left sidebar</li>
+<li>Click on <code>Import</code> in the bottom left</li>
+<li>Enter <code>sfn-workshop</code> as the Name, and browse for the <code>sfn-workshop-windows.yaml</code> file you just downloaded</li>
+<li>Press <code>Import</code></li>
+</ul>
+<p><img src="../figures/anaconda-env.png" width=700></p>
+<h3 id="2B.-Install-scanpy-(for-Windows-users-in-the-single-cell-track-only)">2B. Install scanpy (<strong>for Windows users in the single-cell track only</strong>)<a class="anchor-link" href="#2B.-Install-scanpy-(for-Windows-users-in-the-single-cell-track-only)"> </a></h3><ul>
+<li>Click on the green play button next to the <code>sfn-workshop</code> and choose 'Open terminal'  </li>
+<li>Enter <code>python3 -m pip install scanpy</code> and press <code>Enter</code></li>
+</ul>
+<h2 id="3.-Check-your-installation">3. Check your installation<a class="anchor-link" href="#3.-Check-your-installation"> </a></h2><ol>
 <li>Open Anaconda Navigator</li>
 <li>Click on <code>Environments</code> in the left sidebar</li>
 <li>Select the <code>sfn-workshop</code> environment from the list. This may take several minutes.</li>
@@ -53,11 +67,11 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 </ol>
 <p><img src="../figures/anaconda-jupyter.png" width=700></p>
 <p>You should get a browser tab that says "Jupyter" at the top and lists all the files on your computer. This might not seem like much, but is all you need to get started! :)</p>
-<h3 id="If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"><strong>If this does not work, please come to office hours before class so the CZI computational biology team can help you</strong><a class="anchor-link" href="#If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"> </a></h3><h3 id="5.-Download-course-files">5. Download course files<a class="anchor-link" href="#5.-Download-course-files"> </a></h3><h4 id="For-the-imaging-track">For the imaging track<a class="anchor-link" href="#For-the-imaging-track"> </a></h4><p>Go to <a href="https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging">https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging</a></p>
+<h3 id="If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"><strong>If this does not work, please come to office hours before class so the CZI computational biology team can help you</strong><a class="anchor-link" href="#If-this-does-not-work,-please-come-to-office-hours-before-class-so-the-CZI-computational-biology-team-can-help-you"> </a></h3><h3 id="4.-Download-course-files">4. Download course files<a class="anchor-link" href="#4.-Download-course-files"> </a></h3><h4 id="For-the-imaging-track">For the imaging track<a class="anchor-link" href="#For-the-imaging-track"> </a></h4><p>Go to <a href="https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging">https://github.com/sofroniewn/2019-ndcn-comp-bio-imaging</a></p>
 <h4 id="For-the-single-cell-track">For the single cell track<a class="anchor-link" href="#For-the-single-cell-track"> </a></h4><p>Go to <a href="https://github.com/chanzuckerberg/scRNA-python-workshop">https://github.com/chanzuckerberg/scRNA-python-workshop</a></p>
 <h4 id="Clone-or-download-contents">Clone or download contents<a class="anchor-link" href="#Clone-or-download-contents"> </a></h4><p>If you are comfortable cloning a repository with git, we encourage you to do so. Otherwise, click the green "clone or download" button and choose "download zip". We encourage you to do this the evening before class, as we may make some last-minute updates to the material.</p>
 <p><img src="../figures/git-download.png" width=700></p>
-<h3 id="Bonus:-install-fun-visualization-tools-(optional)">Bonus: install fun visualization tools (optional)<a class="anchor-link" href="#Bonus:-install-fun-visualization-tools-(optional)"> </a></h3><ol>
+<h3 id="5.-Bonus:-install-fun-visualization-tools-(optional)">5. Bonus: install fun visualization tools (optional)<a class="anchor-link" href="#5.-Bonus:-install-fun-visualization-tools-(optional)"> </a></h3><ol>
 <li>Open a terminal window (Mac: Applications &gt; Utilities &gt; Terminal; Windows: Start &gt; Windows System &gt; Command Prompt)</li>
 </ol>
 <h4 id="For-the-imaging-track:">For the imaging track:<a class="anchor-link" href="#For-the-imaging-track:"> </a></h4><ol>

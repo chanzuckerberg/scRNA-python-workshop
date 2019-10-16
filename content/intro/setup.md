@@ -14,33 +14,56 @@ Anaconda is _package manager_, which means that it helps coordinate your Python 
 
 You should now see an icon for "Anaconda Navigator" in your Applications folder (mac) or the Start menu (Windows). Please contact the instructors if you do not see this icon!
 
-### 2. Install Bioconda
+## 2. Install required packages (for **Mac OS**)  
+### 2A. Install Bioconda
 
 Not everyone who uses Anaconda is a biologist. As a result, some biology-specific packages are only available in the Bioconda _channel_ (collection of packages).
 
-1. Open Anaconda Navigator.
-2. Click on `Environments` in the left sidebar
-3. Click on `Channels` in the top middle of the screen
-4. Click on `Add...`
-5. In the bottom text box, type `bioconda` and press `Enter`
-6. Press `Update channels`
+- Open Anaconda Navigator.
+- Click on `Environments` in the left sidebar
+- Click on `Channels` in the top middle of the screen
+- Click on `Add...`
+- In the bottom text box, type `bioconda` and press `Enter`
+- Press `Update channels`
 
 <img src="../figures/anaconda-channel.png" width=700>
 
-### 3. Download the course config file
+### 2B. Download the course config file
 
 To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
 
-1. Download the configuration file called [`sfn-workshop.yaml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1UdDiD2WYBfyJnO2CDUIRhpzpHPrqZHve/view?usp=sharing). Save it an a spot you'll remember.
-2. Open Anaconda Navigator
-3. Click on `Environments` in the left sidebar
-4. Click on `Import` in the bottom left
-5. Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop.yaml` file you just downloaded
-6. Press `Import`
+- Download the configuration file called [`sfn-workshop-mac.yml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1UdDiD2WYBfyJnO2CDUIRhpzpHPrqZHve/view?usp=sharing). Save it an a spot you'll remember.
+- Open Anaconda Navigator
+- Click on `Environments` in the left sidebar
+- Click on `Import` in the bottom left
+- Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop-mac.yaml` file you just downloaded
+- Press `Import`
 
 <img src="../figures/anaconda-env.png" width=700>
 
-### 4. Check your installation
+
+## 2. Install required packages (for **windows**)
+### 2A. Download the course config file
+
+To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
+
+- Download the configuration file called [`sfn-workshop-windows.yml` here](https://drive.google.com/a/chanzuckerberg.com/file/d/1GQGx3DnGRtrxpXAf-iFgREX75TnmbPMg/view?usp=sharing). Save it an a spot you'll remember.
+- Open Anaconda Navigator
+- Click on `Environments` in the left sidebar
+- Click on `Import` in the bottom left
+- Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop-windows.yaml` file you just downloaded
+- Press `Import`
+
+<img src="../figures/anaconda-env.png" width=700>
+
+
+### 2B. Install scanpy (**for Windows users in the single-cell track only**)  
+
+- Click on the green play button next to the `sfn-workshop` and choose 'Open terminal'  
+- Enter `python3 -m pip install scanpy` and press `Enter`
+
+
+## 3. Check your installation
 
 1. Open Anaconda Navigator
 2. Click on `Environments` in the left sidebar
@@ -54,7 +77,7 @@ You should get a browser tab that says "Jupyter" at the top and lists all the fi
 
 ### **If this does not work, please come to office hours before class so the CZI computational biology team can help you**
 
-### 5. Download course files
+### 4. Download course files
 
 #### For the imaging track
 
@@ -70,7 +93,7 @@ If you are comfortable cloning a repository with git, we encourage you to do so.
 
 <img src="../figures/git-download.png" width=700>
 
-### Bonus: install fun visualization tools (optional)
+### 5. Bonus: install fun visualization tools (optional)
 
 1. Open a terminal window (Mac: Applications > Utilities > Terminal; Windows: Start > Windows System > Command Prompt)
 
