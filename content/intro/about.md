@@ -1,5 +1,12 @@
 # Analysis of single cell RNA-seq data (Python)
 
+## Pre- and post-surveys
+
+Before the workshop begins, please fill in [this pre-survey](https://forms.gle/tMrSMyKMZQ6XKJGo6).  
+At the conclusion of the workshop, please fill in [this post-survey](https://forms.gle/g5oMj8WzkwRVFyzo8).
+
+Thanks! This will help us improve future workshops.
+
 ## Course goals
 
 Today it is possible to obtain genome-wide transcriptome data from single cells using high-throughput sequencing (scRNA-seq). The goal of this one-day workshop is to help scientists from all backgrounds (computational or otherwise) feel empowered to explore their scRNA-seq data. Specifically, we hope students leave with the ability to:
