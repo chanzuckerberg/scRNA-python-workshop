@@ -74,6 +74,30 @@ the biological signals of interest in the downstream analysis.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>As an aside, you'll notice that both here and in the previous notebook we read data into python objects using some variation on <code>package.read*</code>, where <code>*</code> indicates that there is some possible suffix. Developers of python data packages that we'll be using today, and many others in the ecosystem try very hard to group objects so that they are discoverable.</p>
+<p>One method of discovering functionality in python is to read documentation. Another is to use <strong>tab-completion</strong> to find similar functions. For reading files, it's usually possible to see what possibilities there are by tab completing <code>package.read</code>, <code>package.load</code>, or <code>package.open</code>. It's unusual for these functions to start with other words.</p>
+<p>For writing files, usually the pattern is <code>object.save</code> or <code>object.write</code>. In this case, try using the <code>package.read</code> pattern by tab completing <code>sc.read</code> and see what happens. What about tab completion with the <code>object.write</code> pattern using the <code>adata</code> object we just loaded?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Knowing this pattern is very helpful. Unfortunately, data files containing expression information will often come in all shapes and sizes. Thankfully, developers of these packages are aware of the common types, and may have already designed readers and writers to make them easy to work with. With this knowledge in hand, you'll be well equipped to execute the following tasks on data stored in a broader variety of file formats.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Computing-quality-control-metrics">Computing quality control metrics<a class="anchor-link" href="#Computing-quality-control-metrics"> </a></h2><p>We'll compute quality metrics and then filter cells and genes accordingly.</p>
 <p>The <code>calculate_qc_metrics</code> function returns two dataframes: one containing quality control metrics about cells, and one containing metrics about genes. This function is housed in the 'preprocessing' portion of the SCANPY library, which you can read more about <a href="https://icb-scanpy.readthedocs-hosted.com/en/stable/api/index.html#module-scanpy.pp">here</a>.</p>
 
@@ -222,7 +246,7 @@ Cells with few reads are likely to have been broken or failed to capture a cell,
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/01-basic-qc_6_1.png"
+<img src="../images/preprocessing/01-basic-qc_8_1.png"
 >
 </div>
 
@@ -293,7 +317,7 @@ Cells with few reads are likely to have been broken or failed to capture a cell,
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/01-basic-qc_9_1.png"
+<img src="../images/preprocessing/01-basic-qc_11_1.png"
 >
 </div>
 
@@ -503,7 +527,7 @@ print('Finished with: \n', adata)</code>
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/01-basic-qc_20_0.png"
+<img src="../images/preprocessing/01-basic-qc_22_0.png"
 >
 </div>
 
@@ -553,7 +577,7 @@ print('Finished with: \n', adata)</code>
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/01-basic-qc_21_1.png"
+<img src="../images/preprocessing/01-basic-qc_23_1.png"
 >
 </div>
 
