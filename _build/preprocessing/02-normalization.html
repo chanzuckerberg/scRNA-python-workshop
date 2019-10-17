@@ -80,12 +80,30 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <h2 id="Principle-components-analysis">Principle components analysis<a class="anchor-link" href="#Principle-components-analysis"> </a></h2><p><strong>Dimensionality reduction methods</strong> seek to take a large set of variables and return a smaller set of <strong>components</strong> that still contain most of the information in the original dataset.</p>
 <p>One of the simplest forms of dimensionality reduction is <strong><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a></strong>. Principal component analysis (PCA) is a mathematical procedure that transforms a number of possibly correlated (e.g., expression of genes in a network) variables into a (smaller) number of uncorrelated variables called <strong>principal components ("PCs")</strong>.</p>
 <p>Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from <a href="http://www.nlpca.org/pca_principal_component_analysis.html">here</a>).</p>
+<p>Biologically, this type of dimensionality reduction is useful and appropriate because cells respond to their environment by turning on regulatory programs that result in expression of modules of genes. As a result, gene expression displays structured co-expression, and dimnesionality reduction by principle component analysis groups those co-varying genes into principle components, ordered by how much variation they explain.</p>
 <p><img src="../figures/pca.png" alt="PCA" style="width: 500px;"/></p>
 <p>Now that we have a clean expression matrix, we can use PCA to visualize an overview of the data and assess confounding factors. <code>SCANPY</code> provides several very useful functions to simplify visualisation.</p>
 <p>Let's first peek at our data before normalization:</p>
 
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">?</span>sc.pl.pca_overview
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -113,7 +131,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_5_0.png"
+<img src="../images/preprocessing/02-normalization_6_0.png"
 >
 </div>
 
@@ -125,7 +143,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_5_1.png"
+<img src="../images/preprocessing/02-normalization_6_1.png"
 >
 </div>
 
@@ -137,7 +155,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_5_2.png"
+<img src="../images/preprocessing/02-normalization_6_2.png"
 >
 </div>
 
@@ -155,7 +173,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The first plot has a strange, very linear first PC (which captures the most variation in the dataset). This suggests that we have outliers in our data.</p>
 <p>The next row of plots shows the <strong>loadings</strong>, which indicate how strongly each variable in the original data contributes to each principle component. Here, we see that the first PC is strongly determined by the expression of just a small number of genes.</p>
-<p>The bottom plot shows us that the first principle component captures the vast majority of the variation in the raw data.</p>
+<p>The bottom plot shows us that the first principle component captures the vast majority of the variation in the raw data, and that a single gene dominates the variation in that component.</p>
 
 </div>
 </div>
@@ -166,8 +184,10 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Normalizing-cell-library-size">Normalizing cell library size<a class="anchor-link" href="#Normalizing-cell-library-size"> </a></h2><p>Library sizes vary because scRNA-seq data is often sequenced on highly multiplexed platforms, and the total reads which are derived from each cell may differ substantially. Some quantification methods
-(eg. <a href="http://cole-trapnell-lab.github.io/cufflinks/"><code>Cufflinks</code></a>, <a href="http://deweylab.github.io/RSEM/"><code>RSEM</code></a>) incorporate library size when determining gene expression estimates and thus do not require this normalization. However, if another quantification method was used then library size must be corrected for.</p>
+<h2 id="Normalizing-cell-library-size">Normalizing cell library size<a class="anchor-link" href="#Normalizing-cell-library-size"> </a></h2><p>One factor that contributes variation to single-cell RNA-sequencing experiments is called "Library size variation". 
+Library sizes vary for many reasons, including natural differences in cell size, variation of RNA capture, variation in the efficiency of PCR amplification used to generate enough RNA to create the sequencing library. In addition, because scRNA-seq data is often sequenced on highly multiplexed platforms, and the total reads which are derived from each cell may differ substantially.</p>
+<p>As a result, while the volume of a cell is informative of a cell's phenotype, there is much more variation in size due to technical factors, and so cells are commonly normalized to have comparable RNA content, becuase this is known to exclude much more technical than biological variation. However, it is important to note that all reasoning about differences between cells after this normalization occurs is restricted to asking question about the <em>relative</em>, not absolute, abundance of RNA in one cell vs another.</p>
+<p>Some quantification methods (eg. <a href="http://cole-trapnell-lab.github.io/cufflinks/"><code>Cufflinks</code></a>, <a href="http://deweylab.github.io/RSEM/"><code>RSEM</code></a>) incorporate library size when determining gene expression estimates and thus do not require this normalization. However, if another quantification method was used then library size must be corrected for.</p>
 <p>There are two main approaches to this correction. Many methods use a simple linear scaling to adjust counts such that each cell (row) has about the same total library size. Examples include converting to counts per million (<code>CPM</code>) and closely related methods such as <code>scran</code>. While simple, these approaches do a reasonable job of correcting for differences in library size.</p>
 <p>Other methods are more complex, and generally involve parametric modeling of count data to perform nonlinear normalization. These methods are useful when there are more complex sources of unwanted variation (e.g., for highly heterogeneous populations of cells with different sizes).</p>
 <p>In this lesson, we'll stick to the simple, linear scaling methods. We recommend reviewing <a href="http://scholar.google.com/scholar_lookup?hl=en&amp;volume=8&amp;publication_year=2019&amp;pages=315-328&amp;journal=Cell+Syst&amp;author=MB+Cole&amp;author=D+Risso&amp;author=A+Wagner&amp;author=D+DeTomaso&amp;author=J+Ngai&amp;author=E+Purdom&amp;author=S+Dudoit&amp;author=N+Yosef&amp;title=Performance+assessment+and+selection+of+normalization+procedures+for+single%E2%80%90cell+RNA%E2%80%90seq">Cole et al., 2019</a> for an in-depth comparison of normalization methods.</p>
@@ -234,7 +254,7 @@ million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</st
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_10_0.png"
+<img src="../images/preprocessing/02-normalization_11_0.png"
 >
 </div>
 
@@ -246,7 +266,7 @@ million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</st
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_10_1.png"
+<img src="../images/preprocessing/02-normalization_11_1.png"
 >
 </div>
 
@@ -258,7 +278,7 @@ million (<strong>CPM</strong>) by dividing each row by a <strong>size factor</st
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_10_2.png"
+<img src="../images/preprocessing/02-normalization_11_2.png"
 >
 </div>
 
@@ -350,8 +370,92 @@ This is more reasonable than before: the second component now explains some of t
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As we saw earlier, this dataset is dominated by a small number of highly expressed genes.</p>
-<p>One way to address this is by <strong>centering and scaling</strong> the gene expression values (you may remember a "z-score" from stats class). Importantly, doing this places an equal weight on each gene for downstream analysis. Depending on your biological question, this may or may not be appropriate. The advantage of doing so, however, is that it de-emphasizes the small handful of genes that are differentially expressed at high levels, which are currently dominating the data.</p>
+<p>As we saw earlier, this dataset is dominated by one or more highly expressed genes. One thing to test is to determine if the offending gene, <code>Rn45s</code>, when removed, yields a more reasonable analysis. This can be assessed by removing the gene and re-running PCA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">not_Rn45s</span> <span class="o">=</span> <span class="n">adata_cpm</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span> <span class="o">!=</span> <span class="s1">&#39;Rn45s&#39;</span>
+<span class="n">adata_no_Rn45s</span> <span class="o">=</span> <span class="n">adata_cpm</span><span class="p">[:,</span> <span class="n">not_Rn45s</span><span class="p">]</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata_no_Rn45s</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">pca_overview</span><span class="p">(</span><span class="n">adata_no_Rn45s</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;mouse.id&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_18_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_18_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/preprocessing/02-normalization_18_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This makes things slightly better. There are now other genes in PC1 that contribute meaningfully to its loading, and PC1 is no longer the only component that contributes significant variation. However, it's obvious from looking at the genes that we would likely have to remove a few more before we'd get more equal contribution from large numbers of genes, and there could be low-expression genes, such as transcription factors, which are really informative of cell state, but are masked by the expression of other, more highly expressed genes.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Another way to more systematically address this is by <strong>centering and scaling</strong> the gene expression values (you may remember a "z-score" from stats class). Importantly, doing this places an equal weight on each gene for downstream analysis. Depending on your biological question, this may or may not be appropriate. The advantage of doing so, however, is that it de-emphasizes the small handful of genes that are differentially expressed at high levels, which are currently dominating the data.</p>
 <p>First, we take the log(1+x) of each value. The +1 makes sure that 0 values in the original data still map to 0 in log space (and prevents us from trying to take the log of 0). This makes the expression values more closely approximate a Gaussian distribution, which is an assumption inherent to many downstream analysis methods.</p>
 <p>Then for each gene, we subtract the mean expression value and divide by the standard deviation.</p>
 
@@ -387,7 +491,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_17_0.png"
+<img src="../images/preprocessing/02-normalization_21_0.png"
 >
 </div>
 
@@ -399,7 +503,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_17_1.png"
+<img src="../images/preprocessing/02-normalization_21_1.png"
 >
 </div>
 
@@ -411,7 +515,7 @@ This is more reasonable than before: the second component now explains some of t
 
 
 <div class="output_png output_subarea ">
-<img src="../images/preprocessing/02-normalization_17_2.png"
+<img src="../images/preprocessing/02-normalization_21_2.png"
 >
 </div>
 
