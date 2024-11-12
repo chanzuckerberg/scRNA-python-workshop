@@ -32,7 +32,7 @@ Not everyone who uses Anaconda is a biologist. As a result, some biology-specifi
 
 To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
 
-- Download the configuration file called [`sfn-workshop-mac.yml` here](https://raw.githubusercontent.com/chanzuckerberg/scRNA-python-workshop/refs/heads/master/sfn-workshop.yml). Save it an a spot you'll remember.
+- Download the configuration file called [`sfn-workshop.yml` here](https://raw.githubusercontent.com/chanzuckerberg/scRNA-python-workshop/refs/heads/master/sfn-workshop.yml). Save it an a spot you'll remember.
 - Open Anaconda Navigator
 - Click on `Environments` in the left sidebar
 - Click on `Import` in the bottom left
@@ -47,11 +47,11 @@ To handle installation of all the Python packages required for the workshop (bot
 
 To handle installation of all the Python packages required for the workshop (both days, all tracks), we have prepared a configuration file that tells Anaconda how to configure your environment.
 
-- Download the configuration file called [`sfn-workshop-windows.yml` here](https://raw.githubusercontent.com/chanzuckerberg/scRNA-python-workshop/refs/heads/master/sfn-workshop.yml). Save it an a spot you'll remember.
+- Download the configuration file called [`sfn-workshop.yml` here](https://raw.githubusercontent.com/chanzuckerberg/scRNA-python-workshop/refs/heads/master/sfn-workshop.yml). Save it an a spot you'll remember.
 - Open Anaconda Navigator
 - Click on `Environments` in the left sidebar
 - Click on `Import` in the bottom left
-- Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop-windows.yaml` file you just downloaded
+- Enter `sfn-workshop` as the Name, and browse for the `sfn-workshop.yaml` file you just downloaded
 - Press `Import`
 
 <img src="../figures/anaconda-env.png" width=700>
